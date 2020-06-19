@@ -142,10 +142,6 @@ namespace KnifeAndSpoon
         // [START signin]
         void SignIn()
         {
-            if (FirebaseAuth.Instance.CurrentUser != null)
-            {
-
-            }
             Intent signInIntent = Android.Gms.Auth.Api.Auth.GoogleSignInApi.GetSignInIntent(mGoogleApiClient);
             StartActivityForResult(signInIntent, RC_SIGN_IN);
         }
