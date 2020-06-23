@@ -102,5 +102,10 @@ namespace KnifeAndSpoon
         {
             Console.WriteLine(TheCarousel.Position);
         }
+
+        public void addRedirect(object sender, EventArgs args)
+        {
+            Navigation.PushAsync(new InsertPage());
+        }
     }
 }
