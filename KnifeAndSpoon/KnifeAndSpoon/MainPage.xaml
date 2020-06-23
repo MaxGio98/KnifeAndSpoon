@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="KnifeAndSpoon.MainPage"
+             BackgroundColor="#b10000">
+    <FlexLayout Direction="Column"
+                JustifyContent="SpaceEvenly"
+                AlignItems="Center">
+        <Image Source="app_logo" HeightRequest="200" WidthRequest="200"></Image>
+        <StackLayout Spacing="0">
+            <Button x:Name="settingsFab" Clicked="login" HeightRequest="50" WidthRequest="250" BackgroundColor="White" CornerRadius="50" ContentLayout="Left,30" HorizontalOptions="Center" Text="Sign in with Google" Padding="20,0,20,0" Image="g_logo.xml" />
+            <Button HeightRequest="50" WidthRequest="100" Text="Entra senza account" FontSize="10" Clicked="loginAnonymous" BorderColor="Transparent" BackgroundColor="Transparent" BorderRadius="5"/>
+        </StackLayout>
+    </FlexLayout>
+ 
+
+</ContentPage>
