@@ -1,7 +1,9 @@
 ﻿using KnifeAndSpoon.Model;
+using Plugin.CloudFirestore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,10 +29,11 @@ namespace KnifeAndSpoon
             source.Add(new Ricetta
             {
                 Titolo = "PASTAH",
-                ImageUrl = "https://firebasestorage.googleapis.com/v0/b/knifeandspoon-3ac35.appspot.com/o/38c4468c-038e-4f4a-9a21-4cf3f915da2c.jpg?alt=media&token=248808c6-a2b0-47f0-bdbd-8ef0a21f9c4b"
+                Thumbnail = "https://firebasestorage.googleapis.com/v0/b/knifeandspoon-3ac35.appspot.com/o/38c4468c-038e-4f4a-9a21-4cf3f915da2c.jpg?alt=media&token=248808c6-a2b0-47f0-bdbd-8ef0a21f9c4b"
             });
             Ricette = new ObservableCollection<Ricetta>(source);
             TheCarousel.ItemsSource = Ricette;
+            getRicetta();
         }
 
         public void openFabs(object sender, EventArgs args)
@@ -111,6 +114,20 @@ namespace KnifeAndSpoon
         public async void pushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
+        }
+
+
+        public async Task<IEnumerable<Ricetta>> getRicetta()
+        {
+            var group = await CrossCloudFirestore.Current.
+               Instance.
+               GetCollection("Ricette").
+               GetDocumentsAsync();
+            List<Ricetta> ricetta = group.ToObjects<Ricetta>().ToList();
+
+            Debug.WriteLine(ricetta[0].NumeroPersone);
+            Debug.WriteLine(ricetta[0].Passaggi.Count);
+            return ricetta;
         }
     }
 }
