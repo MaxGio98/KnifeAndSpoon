@@ -4,10 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="KnifeAndSpoon.InsertPage">
-    <ContentPage.Content>
-        <StackLayout>
+             xmlns:local="clr-namespace:KnifeAndSpoon"
+             x:Class="KnifeAndSpoon.InsertPage"
+             NavigationPage.HasNavigationBar="False">
+    <Grid>
+        <Button>
             
-        </StackLayout>
-    </ContentPage.Content>
+        </Button>
+    </Grid>
 </ContentPage>

@@ -105,7 +105,12 @@ namespace KnifeAndSpoon
 
         public void addRedirect(object sender, EventArgs args)
         {
-            Navigation.PushAsync(new InsertPage());
+            pushPage(new InsertPage());
+        }
+
+        public async void pushPage(ContentPage page)
+        {
+            await Navigation.PushAsync(page);
         }
     }
 }

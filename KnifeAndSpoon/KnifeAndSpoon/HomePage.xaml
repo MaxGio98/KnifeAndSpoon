@@ -10,19 +10,7 @@
     <Grid>
         <StackLayout>
             <StackLayout Orientation="Horizontal">
-                <controls:CircleImage Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" HorizontalOptions="Start" Margin="10,10">
-                    <controls:CircleImage.WidthRequest>
-                        <OnPlatform x:TypeArguments="x:Double">
-                            <On Platform="Android, iOS">55</On>
-                            <On Platform="WinPhone">75</On>
-                        </OnPlatform>
-                    </controls:CircleImage.WidthRequest>
-                    <controls:CircleImage.HeightRequest>
-                        <OnPlatform x:TypeArguments="x:Double">
-                            <On Platform="Android, iOS">55</On>
-                            <On Platform="WinPhone">75</On>
-                        </OnPlatform>
-                    </controls:CircleImage.HeightRequest>
+                <controls:CircleImage Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" HorizontalOptions="Start" Margin="10,10" HeightRequest="55" WidthRequest="55">
                 </controls:CircleImage>
                 <StackLayout Margin="0,10" Spacing="0">
                     <StackLayout Orientation="Horizontal" Spacing="0">
