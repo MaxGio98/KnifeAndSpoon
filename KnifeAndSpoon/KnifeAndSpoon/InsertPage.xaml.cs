@@ -15,7 +15,7 @@ namespace KnifeAndSpoon
         public InsertPage()
         {
             InitializeComponent();
-            this.Title = "Inserisci il nome della ricetta";
+            this.Title = "Nuova ricetta";
         }
     }
 }

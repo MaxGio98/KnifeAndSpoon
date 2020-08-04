@@ -7,9 +7,46 @@
              xmlns:local="clr-namespace:KnifeAndSpoon"
              x:Class="KnifeAndSpoon.InsertPage"
              NavigationPage.HasNavigationBar="False">
-    <Grid>
-        <Button>
-            
-        </Button>
+    <Grid BackgroundColor="White">
+        <ScrollView>
+            <StackLayout Spacing="-140">
+                <Image Source="antipastomain">
+                </Image>
+                <StackLayout>
+                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera"/>
+
+                    <Frame CornerRadius="25"
+                       HasShadow="False"
+                       BackgroundColor="White"
+                       Padding="0">
+                        <StackLayout>
+                            <Entry x:Name="Name" FontSize="20" Margin="25,25,25,0" Placeholder="Nome Ricetta">
+                            </Entry>
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Image Source="clock" HeightRequest="40" WidthRequest="40" Margin="25,0,0,0"></Image>
+                                <Entry x:Name="Time" Keyboard="Numeric" Margin="10,0,0,0" Placeholder="Tempo in minuti">
+                                </Entry>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Image Source="group" HeightRequest="40" WidthRequest="40" Margin="25,0,0,0"></Image>
+                                <Entry x:Name="Servings"  Keyboard="Numeric" Margin="10,0,0,0" Placeholder="Numero Persone">
+                                </Entry>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Label Text="Categoria" FontSize="20" Margin="25,0,0,0">
+                                </Label>
+                                <Picker x:Name="Category" WidthRequest="200">
+
+                                </Picker>
+                            </StackLayout>
+                            <Label Text="Ingredienti" FontSize="20" Margin="25,0,0,0">
+                            </Label>
+                            <Label Text="Passaggi" FontSize="20" Margin="25,0,0,0">
+                            </Label>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>
