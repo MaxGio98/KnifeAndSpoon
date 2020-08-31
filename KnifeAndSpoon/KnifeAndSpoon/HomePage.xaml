@@ -4,13 +4,14 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
              mc:Ignorable="d"
              x:Class="KnifeAndSpoon.HomePage"
              NavigationPage.HasNavigationBar="False">
     <Grid>
         <StackLayout>
             <StackLayout Orientation="Horizontal">
-                <controls:CircleImage Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" HorizontalOptions="Start" Margin="10,10" HeightRequest="55" WidthRequest="55">
+                <controls:CircleImage Source="pizza" x:Name="ImgUtente" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" HorizontalOptions="Start" Margin="10,10" HeightRequest="55" WidthRequest="55">
                 </controls:CircleImage>
                 <StackLayout Margin="0,10" Spacing="0">
                     <StackLayout Orientation="Horizontal" Spacing="0">
@@ -55,7 +56,17 @@
                         <CarouselView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <ImageButton Source="{Binding ImageUrl}" Aspect="AspectFill" Clicked="openRicetta"></ImageButton>
+                                    <ImageButton Source="{Binding Thumbnail}" Aspect="AspectFill" Clicked="OpenRicetta"></ImageButton>
+
+                                    <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
+                                        <magic:GradientView.GradientSource>
+                                            <magic:LinearGradient Angle="0">
+                                                <magic:GradientStop Color="#00000000" Offset="0.6" />
+                                                <magic:GradientStop Color="#aa000000" Offset="1" />
+                                            </magic:LinearGradient>
+                                        </magic:GradientView.GradientSource>
+                                    </magic:GradientView>
+                                    
                                     <Label Text="{Binding Titolo}" HorizontalTextAlignment="Center" FontSize="Title" TextColor="White" Padding="15,0,0,20" HorizontalOptions="Start" VerticalOptions="End"/>
                                 </Grid>
                             </DataTemplate>
@@ -69,6 +80,7 @@
                                Padding="10"/>
                 </Grid>
             </Frame>
+
             <Label Text="Le ultime 10 ricette" FontSize="Title" Padding="10,0,0,0" TextColor="Black"></Label>
         </StackLayout>
 
@@ -77,7 +89,7 @@
         <Button x:Name="settingsFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,210" Text="Impostazioni" TextColor="White" Padding="20,0,20,0" Image="settings" />
         <Button x:Name="favouriteFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,160" Text="Preferiti" TextColor="White" Padding="20,0,20,0" Image="favourite" />
         <Button x:Name="searchFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,110" Text="Cerca" TextColor="White" Padding="20,0,20,0" Image="search" />
-        <Button x:Name="addFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,60" Text="Aggiungi" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="addRedirect"/>
+        <Button x:Name="addFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,60" Text="Aggiungi" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="AddRedirect"/>
 
 
         <ImageButton x:Name="mainFab" Source="pizza" 
@@ -88,6 +100,6 @@
                      VerticalOptions="End"
             BackgroundColor="#b10000"
             CornerRadius="50"
-                     Clicked="openFabs"/>
+                     Clicked="OpenFabs"/>
     </Grid>
 </ContentPage>

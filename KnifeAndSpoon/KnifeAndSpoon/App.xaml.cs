@@ -1,4 +1,6 @@
-﻿using Plugin.GoogleClient;
+﻿using Plugin.CloudFirestore;
+using Plugin.FirebaseAuth;
+using Plugin.GoogleClient;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,15 +11,32 @@ namespace KnifeAndSpoon
     {
         public App()
         {
+            CrossDeviceOrientation.Current.LockOrientation(DeviceOrientations.Landscape);
             InitializeComponent();
-            if (CrossGoogleClient.Current.CurrentUser != null)
+            if (CrossFirebaseAuth.Current.Instance.CurrentUser != null)
             {
-                MainPage = new NavigationPage(new HomePage());
+                checkUser();
             }
             else
             {
                 MainPage = new NavigationPage(new MainPage());
             }
+        }
+
+        public async void checkUser()
+        {
+            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+            if (glob.Count == 0)
+            {
+                //Apertura pagina registrazione
+                MainPage = new NavigationPage(new RegisterPage());
+            }
+            else
+            {
+                //Apertura pagina principale
+                MainPage = new NavigationPage(new HomePage());
+            }
+            
         }
 
         protected override void OnStart()

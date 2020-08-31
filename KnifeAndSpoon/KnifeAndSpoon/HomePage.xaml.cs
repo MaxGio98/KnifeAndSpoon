@@ -18,25 +18,17 @@ namespace KnifeAndSpoon
     public partial class HomePage : ContentPage
     {
         Boolean isFabsOpen;
-        Task autoCloseFabs;
-        readonly IList<Ricetta> source;
+        readonly Task autoCloseFabs;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
         public HomePage()
         {
             isFabsOpen = false;
             InitializeComponent();
-            source = new List<Ricetta>();
-            source.Add(new Ricetta
-            {
-                Titolo = "PASTAH",
-                Thumbnail = "https://firebasestorage.googleapis.com/v0/b/knifeandspoon-3ac35.appspot.com/o/38c4468c-038e-4f4a-9a21-4cf3f915da2c.jpg?alt=media&token=248808c6-a2b0-47f0-bdbd-8ef0a21f9c4b"
-            });
-            Ricette = new ObservableCollection<Ricetta>(source);
-            TheCarousel.ItemsSource = Ricette;
-            getRicetta();
+            LoadRicette();
         }
 
-        public void openFabs(object sender, EventArgs args)
+
+        public void OpenFabs(object sender, EventArgs args)
         {
             if (isFabsOpen == false)
             {
@@ -86,7 +78,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        async Task closeFabsWithWait()
+        async Task CloseFabsWithWait()
         {
             await Task.Delay(2000);
             isFabsOpen = !isFabsOpen;
@@ -101,23 +93,23 @@ namespace KnifeAndSpoon
             addFab.FadeTo(0, 150);
         }
 
-        public void openRicetta(object sender, EventArgs args)
+        public void OpenRicetta(object sender, EventArgs args)
         {
-            Console.WriteLine(TheCarousel.Position);
+            PushPage(new ShowPage(Ricette[TheCarousel.Position],"Show"));
         }
 
-        public void addRedirect(object sender, EventArgs args)
+        public void AddRedirect(object sender, EventArgs args)
         {
-            pushPage(new InsertPage());
+            PushPage(new InsertPage());
         }
 
-        public async void pushPage(ContentPage page)
+        public async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }
 
 
-        public async Task<IEnumerable<Ricetta>> getRicetta()
+        public async Task<IEnumerable<Ricetta>> GetRicetta()
         {
             var group = await CrossCloudFirestore.Current.
                Instance.
@@ -128,6 +120,17 @@ namespace KnifeAndSpoon
             Debug.WriteLine(ricetta[0].NumeroPersone);
             Debug.WriteLine(ricetta[0].Passaggi.Count);
             return ricetta;
+        }
+
+        public async Task LoadRicette()
+        {
+            var group = await CrossCloudFirestore.Current.
+               Instance.
+               GetCollection("Ricette").
+               GetDocumentsAsync();
+            List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
+            Ricette = new ObservableCollection<Ricetta>(ricette);
+            TheCarousel.ItemsSource = Ricette;
         }
     }
 }

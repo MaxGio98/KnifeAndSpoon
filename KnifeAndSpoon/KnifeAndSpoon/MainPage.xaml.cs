@@ -1,4 +1,6 @@
-﻿using Plugin.FirebaseAuth;
+﻿using KnifeAndSpoon.Model;
+using Plugin.CloudFirestore;
+using Plugin.FirebaseAuth;
 using Plugin.GoogleClient;
 using Plugin.GoogleClient.Shared;
 using System;
@@ -92,7 +94,24 @@ namespace KnifeAndSpoon
             //Registrazione utente su firebase
             var credential = CrossFirebaseAuth.Current.GoogleAuthProvider.GetCredential(idToken, accessToken);
             var result = await CrossFirebaseAuth.Current.Instance.SignInWithCredentialAsync(credential);
-            App.Current.MainPage = new HomePage();
+            //Controllo se utente è registrato alla piattaforma
+            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+            if (glob.Count == 0)
+            {
+                //Apertura pagina registrazione
+                PushPage(new RegisterPage());
+            }
+            else
+            {
+                //Apertura pagina principale
+                App.Current.MainPage = new HomePage();
+            }
+            
+        }
+
+        public async void PushPage(ContentPage page)
+        {
+            await Navigation.PushAsync(page);
         }
 
         private void Button_Clicked(object sender, EventArgs e)

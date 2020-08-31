@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             mc:Ignorable="d"
+             x:Class="KnifeAndSpoon.ShowPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <Grid BackgroundColor="White">
+            <ScrollView>
+                <StackLayout Spacing="-140">
+                    <Image x:Name="Thumbnail">
+                    </Image>
+                    <StackLayout>
+                        <Button x:Name="multiFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White"/>
+
+                        <Frame CornerRadius="25"
+                       HasShadow="False"
+                       BackgroundColor="White"
+                       VerticalOptions="FillAndExpand"
+                       Padding="0">
+                            <StackLayout>
+                                <Label x:Name="Titolo" TextColor="Black" FontSize="30" Margin="25,25,25,15">
+                                </Label>
+                                <StackLayout Orientation="Horizontal" Margin="25,10,0,0">
+                                    <controls:CircleImage x:Name="ImgAutore" Source="pizza" Aspect="AspectFit" BorderThickness="0" HeightRequest="50" WidthRequest="50">
+                                    </controls:CircleImage>
+                                    <StackLayout Margin="10,0,0,0">
+                                        <Label Text="Autore" TextColor="Black" HorizontalOptions="Start"></Label>
+                                        <Label x:Name="NomeAutore" FontSize="25" HorizontalOptions="Start" TextColor="Black"></Label>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Margin="25,10,0,0">
+                                    <Image x:Name="ImgCategoria" Aspect="AspectFit" HeightRequest="50" WidthRequest="50">
+                                    </Image>
+                                    <StackLayout Margin="10,0,0,0">
+                                        <Label Text="Categoria" TextColor="Black" HorizontalOptions="Start"></Label>
+                                        <Label x:Name="NomeCategoria" FontSize="25" HorizontalOptions="Start" TextColor="Black"></Label>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="clock" HeightRequest="50" WidthRequest="50" Margin="25,0,0,0" VerticalOptions="Center"></Image>
+                                    <Label x:Name="Tempo" TextColor="Black" FontSize="20" Margin="5,0,0,0" VerticalOptions="Center">
+                                    </Label>
+                                    <Image Source="group" HeightRequest="50" WidthRequest="50" Margin="30,0,0,0" VerticalOptions="Center"></Image>
+                                    <Label x:Name="Porzioni" TextColor="Black" FontSize="20" Margin="5,0,0,0" VerticalOptions="Center">
+                                    </Label>
+                                </StackLayout>
+                                <Label Text="Ingredienti" TextColor="Black" FontSize="25" Margin="25,10,0,5">
+                                </Label>
+                                <StackLayout x:Name="lst_ingredienti" BindableLayout.ItemsSource="{Binding Ingredienti}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Frame HeightRequest="15" WidthRequest="15" CornerRadius="20" HorizontalOptions="Start" VerticalOptions="Center" Margin="25,0,5,0" Padding="0" BackgroundColor="#b10000">
+                                                </Frame>
+                                                <Label Text="{Binding Nome}"  FontSize="20" TextColor="Black" VerticalOptions="Center" Margin="0"></Label>
+                                                <Label Text="{Binding Qt}"  FontSize="20" TextColor="Black" VerticalOptions="Center" Margin="0"></Label>
+                                                <Label Text="{Binding Ut}"  FontSize="20" TextColor="Black" VerticalOptions="Center" Margin="0,0,25,0"></Label>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
+                                <Label Text="Passaggi" TextColor="Black" FontSize="25" Margin="25,10,0,5">
+                                </Label>
+                                <StackLayout x:Name="lst_passaggi" BindableLayout.ItemsSource="{Binding Passaggi}" Margin="0,0,0,25">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Frame MinimumHeightRequest="40" MinimumWidthRequest="40" HeightRequest="40" WidthRequest="40" CornerRadius="20" HorizontalOptions="Start" VerticalOptions="Center" Margin="25,0,5,0" Padding="0" BackgroundColor="#b10000">
+                                                    <Label Text="{Binding Numero}" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                                                </Frame>
+                                                <Label Text="{Binding Testo}" TextColor="Black" VerticalOptions="Center" FontSize="20" Margin="0,0,25,0"></Label>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
