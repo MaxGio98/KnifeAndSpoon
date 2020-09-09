@@ -21,33 +21,41 @@
                        VerticalOptions="FillAndExpand"
                        Padding="0">
                         <StackLayout>
-                            <Entry x:Name="Name" TextColor="Black" FontSize="20" Margin="25,25,25,0" Placeholder="Nome Ricetta">
+                            <Entry x:Name="Name" TextColor="Black" FontSize="20" Margin="10,25,10,0" Placeholder="Nome Ricetta">
                             </Entry>
                             <StackLayout Orientation="Horizontal" Spacing="0">
-                                <Image Source="clock" HeightRequest="40" WidthRequest="40" Margin="25,0,0,0"></Image>
+                                <Image Source="clock" HeightRequest="40" WidthRequest="40" Margin="10,0,0,0"></Image>
                                 <Entry x:Name="Time" TextColor="Black" Keyboard="Numeric" Margin="10,0,0,0" Placeholder="Tempo in minuti">
                                 </Entry>
                             </StackLayout>
                             <StackLayout Orientation="Horizontal" Spacing="0">
-                                <Image Source="group" HeightRequest="40" WidthRequest="40" Margin="25,0,0,0"></Image>
+                                <Image Source="group" HeightRequest="40" WidthRequest="40" Margin="10,0,0,0"></Image>
                                 <Entry x:Name="Servings" TextColor="Black" Keyboard="Numeric" Margin="10,0,0,0" Placeholder="Numero Persone">
                                 </Entry>
                             </StackLayout>
                             <StackLayout Orientation="Horizontal" Spacing="0">
-                                <Label Text="Categoria" TextColor="Black" FontSize="20" Margin="25,0,0,0">
+                                <Label Text="Categoria" TextColor="Black" FontSize="20" Margin="10,0,0,0"  VerticalOptions="Center">
                                 </Label>
-                                <Picker x:Name="Category" TextColor="Black" WidthRequest="200">
+                                <Picker x:Name="Category" TextColor="Black" WidthRequest="200" VerticalOptions="Center">
 
                                 </Picker>
                             </StackLayout>
-                            <Label Text="Ingredienti" TextColor="Black" FontSize="20" Margin="25,0,0,0">
+                            <Label Text="Ingredienti" TextColor="Black" FontSize="20" Margin="10,0,0,0">
                             </Label>
+                            <StackLayout x:Name="lst_ingredienti">
+                            </StackLayout>
+                            <Button Margin="10,0,10,0" HeightRequest="50" Text="Aggiungi ingrediente" FontSize="15" CornerRadius="50" BackgroundColor="#b10000" TextColor="White" Clicked="AddIngrediente"></Button>
                             <Label Text="Passaggi" TextColor="Black" FontSize="20" Margin="25,0,0,0">
                             </Label>
+                            <StackLayout x:Name="lst_passaggi">
+                            </StackLayout>
+                            <Button Margin="10,0,10,0" HeightRequest="50" Text="Aggiungi passaggio" FontSize="15" CornerRadius="50" BackgroundColor="#b10000" TextColor="White" Clicked="AddPassaggio"></Button>
                         </StackLayout>
                     </Frame>
                 </StackLayout>
             </StackLayout>
         </ScrollView>
+        <Button x:Name="confirmFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,10,10" Text="Pubblica" TextColor="White" Padding="20,0,20,0" Image="pencil"/>
+
     </Grid>
 </ContentPage>
