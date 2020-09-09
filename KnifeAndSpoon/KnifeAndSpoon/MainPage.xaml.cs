@@ -13,8 +13,7 @@ using Xamarin.Forms;
 
 namespace KnifeAndSpoon
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
+
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
@@ -24,7 +23,30 @@ namespace KnifeAndSpoon
         {
             _googleClientManager = CrossGoogleClient.Current;
             InitializeComponent();
+            CheckUser();
         }
+
+        public async void CheckUser()
+        {
+            Console.WriteLine("Inizio");
+            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+            Console.WriteLine("Caricato");
+            Console.WriteLine(glob.Count);
+            if (glob.Count == 0)
+            {
+                Console.WriteLine("Apertura");
+                PushPage(new RegisterPage());
+                Console.WriteLine("Fine");
+            }
+            else
+            {
+                Console.WriteLine("Apertura 2");
+                //Apertura pagina principale
+                App.Current.MainPage = new NavigationPage(new HomePage());
+                Console.WriteLine("Fine 2");
+            }
+        }
+
 
         public void login(object sender, EventArgs args)
         {
@@ -104,7 +126,7 @@ namespace KnifeAndSpoon
             else
             {
                 //Apertura pagina principale
-                App.Current.MainPage = new HomePage();
+                App.Current.MainPage = new NavigationPage(new HomePage());
             }
             
         }

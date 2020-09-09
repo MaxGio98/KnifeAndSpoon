@@ -101,11 +101,13 @@ namespace KnifeAndSpoon
 
         public async Task LoadUtente(String id)
         {
+            
             var result = await CrossCloudFirestore.Current.Instance.GetDocument("Utenti/" + id).GetDocumentAsync();
-            Utente utente = result.ToObject<Utente>();
-            Autore = utente;
-            ImgAutore.Source = Autore.Immagine;
-            NomeAutore.Text = Autore.Nome;
+            
+            Console.WriteLine(result.Data["Nome"].ToString());
+            Console.WriteLine(result.Data["Immagine"].ToString());
+            ImgAutore.Source = result.Data["Immagine"].ToString();
+            NomeAutore.Text = result.Data["Nome"].ToString();
         }
 
         private String getCorrectUtForm(String ut, String qt)

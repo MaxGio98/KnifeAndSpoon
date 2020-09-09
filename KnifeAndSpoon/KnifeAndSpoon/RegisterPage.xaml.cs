@@ -18,7 +18,7 @@ namespace KnifeAndSpoon
         public RegisterPage()
         {
             InitializeComponent();
-            ImgUtente.Source = CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl;
+            //ImgUtente.Source = CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl;
         }
 
         public void Register(object sender, EventArgs args)
