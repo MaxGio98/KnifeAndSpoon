@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             BackgroundColor="Transparent"
+             x:Class="KnifeAndSpoon.ErrorDialog">
+    <ContentPage.Content>
+        <Frame Margin="20" VerticalOptions="Center" HorizontalOptions="Center" Padding="20" CornerRadius="10">
+            <StackLayout>
+                <Label x:Name="label" HorizontalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" FontSize="20"></Label>
+                <Button VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="Center" Margin="0,0,10,0" Text="Ok" TextColor="White" Clicked="okButton"></Button>
+            </StackLayout>
+        </Frame>
+        
+    </ContentPage.Content>
+</ContentPage>

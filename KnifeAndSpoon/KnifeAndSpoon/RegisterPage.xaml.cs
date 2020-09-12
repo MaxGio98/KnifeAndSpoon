@@ -18,28 +18,33 @@ namespace KnifeAndSpoon
         public RegisterPage()
         {
             InitializeComponent();
-            //ImgUtente.Source = CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl;
+            ImgUtente.Source = CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl;
         }
 
         public void Register(object sender, EventArgs args)
         {
             string usr = NomeUtente.Text;
             //Controllo nome inserito
-            if (usr.Trim().Equals(""))
+            if (usr == null)
             {
-                //Utils.errorDialog(this, R.string.error_empty_name, R.string.error_ok);
+                Navigation.PushModalAsync(new ErrorDialog("Il nome non può essere vuoto"));
+            }
+            else if (usr.Trim().Equals(""))
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Il nome non può essere vuoto"));
             }
             else if (usr.Contains(" ") && (usr.StartsWith(" ") && usr.EndsWith(" ")))
             {
-                //Utils.errorDialog(this, R.string.error_name_space, R.string.error_ok);
+                Navigation.PushModalAsync(new ErrorDialog("Il nome non può contenere spazi"));
             }
             else if (usr.Length < 6 || usr.Length > 20)
             {
-                //Utils.errorDialog(this, R.string.error_lenght_name, R.string.error_ok);
+                Navigation.PushModalAsync(new ErrorDialog("Il nome deve essere almeno 6 caratteri e al massimo 20"));
             }
             else
             {
                 //Controllo se il nome utente è già stato utilizzato
+                loadOverlay.IsVisible = true;
                 finalizeRegist(usr);
             }
         }
@@ -54,11 +59,14 @@ namespace KnifeAndSpoon
                          .Instance
                          .GetCollection("Utenti")
                          .AddDocumentAsync(new Utente(CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl.ToString(), CrossFirebaseAuth.Current.Instance.CurrentUser.Email,usr,false));
+                App.Current.MainPage = new NavigationPage(new HomePage());
             }
             else
             {
                 //Nome utente già utilizzato
+                Navigation.PushModalAsync(new ErrorDialog("Il nome è già stato utilizzato"));
             }
+            loadOverlay.IsVisible = false;
         }
 
     }
