@@ -36,11 +36,18 @@ namespace KnifeAndSpoon
                Instance.
                GetCollection("Ricette").
                WhereEqualsTo("isApproved", true).
-               WhereEqualsTo("Titolo",value).
                GetDocumentsAsync();
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
+            List<Ricetta> ricetteFiltered = new List<Ricetta>();
+            for(int i = 0; i < ricette.Count; i++)
+            {
+                if (ricette[i].Titolo.ToLower().Contains(value.ToLower()))
+                {
+                    ricetteFiltered.Add(ricette[i]);
+                }
+            }
             Console.WriteLine(ricette.Count);
-            BindableLayout.SetItemsSource(SearchList, new ObservableCollection<Ricetta>(ricette));
+            BindableLayout.SetItemsSource(SearchList, new ObservableCollection<Ricetta>(ricetteFiltered));
             loadOverlay.IsVisible = false;
         }
 
