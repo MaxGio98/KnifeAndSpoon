@@ -21,6 +21,7 @@
     <PackageReference Include="MagicGradients" Version="1.1.1" />
     <PackageReference Include="Plugin.CloudFirestore" Version="3.1.0.2" />
     <PackageReference Include="Plugin.FirebaseAuth" Version="3.1.0" />
+    <PackageReference Include="Plugin.FirebaseStorage" Version="3.1.0" />
     <PackageReference Include="Plugin.GoogleClient" Version="2.1.12" />
     <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />

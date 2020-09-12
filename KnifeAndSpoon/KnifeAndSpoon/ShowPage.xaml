@@ -14,7 +14,7 @@
             <ScrollView>
                 <StackLayout Spacing="-140">
                     <Grid>
-                        <Image x:Name="Thumbnail">
+                        <Image x:Name="Thumbnail" Aspect="AspectFill" HeightRequest="300">
                         </Image>
                         <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
                             <magic:GradientView.GradientSource>

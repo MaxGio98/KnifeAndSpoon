@@ -1,4 +1,6 @@
-﻿using Plugin.Media;
+﻿using Plugin.FirebaseStorage;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
@@ -18,6 +20,7 @@ namespace KnifeAndSpoon
     {
         private int count_ingredienti = 0;
         private int count_passaggi = 0;
+        private MediaFile imgFile=null;
         public InsertPage()
         {
             InitializeComponent();
@@ -168,6 +171,7 @@ namespace KnifeAndSpoon
                     });
                     if (file == null)
                         return;
+                    imgFile = file;
                     imgToUpload.Source = ImageSource.FromStream(() =>
                     {
                         var stream = file.GetStream();
@@ -176,13 +180,34 @@ namespace KnifeAndSpoon
                 }
                 else if(action.Equals("Galleria"))
                 {
+                    if (!CrossMedia.Current.IsPickPhotoSupported)
+                    {
+                        DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                        return;
+                    }
+                    var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+                    {
+                        PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                        CompressionQuality=10
+                    });
+
+
+                    if (file == null)
+                        return;
+
+                    imgFile = file;
+                    imgToUpload.Source = ImageSource.FromStream(() =>
+                    {
+                        var stream = file.GetStream();
+                        return stream;
+                    });/*
                     (sender as Button).IsEnabled = false;
                     Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
                     if (stream != null)
                     {
                         imgToUpload.Source = ImageSource.FromStream(() => stream);
                     }
-                    (sender as Button).IsEnabled = true;
+                    (sender as Button).IsEnabled = true;*/
 
                 }
             }
@@ -248,7 +273,29 @@ namespace KnifeAndSpoon
 
         public void publishRecipeToFirebase(object sender, EventArgs e)
         {
-            Bitmap 
+            if (imgFile == null)
+            {
+                Console.WriteLine("OHHHH");
+            }
+            else
+            {
+                upload();
+            }
+
+            
+        }
+
+        public async void upload()
+        {
+            
+            var reference = CrossFirebaseStorage.Current.Instance.RootReference.GetChild("popo.jpg");
+
+            var uploadProgress = new Progress<IUploadState>();
+            uploadProgress.ProgressChanged += (sender, e) =>
+            {
+                var progress = e.TotalByteCount > 0 ? 100.0 * e.BytesTransferred / e.TotalByteCount : 0;
+            };
+            await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
         }
     }
 }
