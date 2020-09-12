@@ -28,6 +28,8 @@ namespace KnifeAndSpoon
             this.Category.Items.Add("Dolce");
             this.Category.SelectedIndex = 0;
             this.Title = "Nuova ricetta";
+            Servings.TextChanged += OnTextChanged;
+            Time.TextChanged += OnTextChanged;
         }
         public void AddIngrediente(object sender, EventArgs args)
         {
@@ -58,6 +60,8 @@ namespace KnifeAndSpoon
             qt.TextColor = Color.Black;
             qt.VerticalOptions = LayoutOptions.Center;
             qt.WidthRequest = 50;
+            qt.Keyboard = Keyboard.Numeric;
+            qt.TextChanged += OnTextChanged;
             stack.Children.Add(qt);
             Picker ut = new Picker();
             ut.Items.Add("unità");
@@ -83,6 +87,18 @@ namespace KnifeAndSpoon
                 Console.WriteLine(((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[2]).Text);
                 Console.WriteLine(((Picker)((StackLayout)lst_ingredienti.Children[i]).Children[3]).SelectedItem.ToString());
             }*/
+        }
+        public void OnTextChanged(object s, EventArgs e)
+        {
+            Entry entry = s as Entry;
+            if (entry.Text.Contains("-"))
+            {
+                entry.Text = entry.Text.Replace("-", "");
+            }
+            if (entry.Text.Contains("."))
+            {
+                entry.Text = entry.Text.Replace(".", "");
+            }
         }
 
         public void AddPassaggio(object sender, EventArgs args)
@@ -145,6 +161,8 @@ namespace KnifeAndSpoon
                     }
                     var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
+                        AllowCropping = true,
+                        CompressionQuality=10,
                         Directory = "Sample",
                         Name = "test.jpg"
                     });
@@ -165,6 +183,7 @@ namespace KnifeAndSpoon
                         imgToUpload.Source = ImageSource.FromStream(() => stream);
                     }
                     (sender as Button).IsEnabled = true;
+
                 }
             }
             else
@@ -225,6 +244,11 @@ namespace KnifeAndSpoon
             {
             }
             return permissionsGranted;
+        }
+
+        public void publishRecipeToFirebase(object sender, EventArgs e)
+        {
+            Bitmap 
         }
     }
 }
