@@ -9,82 +9,116 @@
              x:Class="KnifeAndSpoon.HomePage"
              NavigationPage.HasNavigationBar="False">
     <Grid>
-        <StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <controls:CircleImage Source="pizza" x:Name="ImgUtente" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" HorizontalOptions="Start" Margin="10,10" HeightRequest="55" WidthRequest="55">
-                </controls:CircleImage>
-                <StackLayout Margin="0,10" Spacing="0">
-                    <StackLayout Orientation="Horizontal" Spacing="0">
-                        <Label Text="Ciao " FontSize="Title" TextColor="Black"/>
-                        <Label x:Name="userName" Text="visitatore" FontSize="Title" TextColor="Black"/>
+        <RefreshView x:Name="refreshView" RefreshColor="#b10000" IsRefreshing="{Binding IsRefreshing}">
+            <ScrollView Orientation="Vertical">
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <controls:CircleImage Source="pizza" x:Name="ImgUtente" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" HorizontalOptions="Start" Margin="10,10" HeightRequest="55" WidthRequest="55">
+                        </controls:CircleImage>
+                        <StackLayout Margin="0,10" Spacing="0">
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Label Text="Ciao " FontSize="Title" TextColor="Black"/>
+                                <Label x:Name="userName" Text="visitatore" FontSize="Title" TextColor="Black"/>
+                            </StackLayout>
+                            <Label Text="Benvenuto su KnifeSpoon" FontSize="Subtitle" TextColor="Black"/>
+                        </StackLayout>
                     </StackLayout>
-                    <Label Text="Benvenuto su KnifeSpoon" FontSize="Subtitle" TextColor="Black"/>
-                </StackLayout>
-            </StackLayout>
-            <ScrollView Orientation="Horizontal">
-                <StackLayout Orientation="Horizontal" Padding="10,0,10,0">
-                    <Grid>
-                        <ImageButton Source="antipastomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10">
-                        </ImageButton>
-                        <Label Text="Antipasto" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
-                    </Grid>
-                    <Grid>
-                        <ImageButton Source="primomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10">
-                        </ImageButton>
-                        <Label Text="Primo" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
-                    </Grid>
-                    <Grid>
-                        <ImageButton Source="secondomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10">
-                        </ImageButton>
-                        <Label Text="Secondo" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
-                    </Grid>
-                    <Grid>
-                        <ImageButton Source="contornomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10">
-                        </ImageButton>
-                        <Label Text="Contorno" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
-                    </Grid>
-                    <Grid>
-                        <ImageButton Source="torta" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10">
-                        </ImageButton>
-                        <Label Text="Dolce" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
-                    </Grid>
-                </StackLayout>
-            </ScrollView>
-            <Frame Margin="10" Padding="0" CornerRadius="10" HeightRequest="200"  AbsoluteLayout.LayoutFlags="All">
-                <Grid>
-                    <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Ricette}" IndicatorView="indicatorView">
-                        <CarouselView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <ImageButton Source="{Binding Thumbnail}" Aspect="AspectFill" Clicked="OpenRicetta"></ImageButton>
+                    <ScrollView Orientation="Horizontal">
+                        <StackLayout Orientation="Horizontal" Padding="10,0,10,0">
+                            <Grid>
+                                <ImageButton Source="antipastomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10" Clicked="FilterByAntipasto">
+                                </ImageButton>
+                                <Label Text="Antipasto" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
+                                <Image x:Name="checkAntipasto" IsVisible="false" WidthRequest="20" HeightRequest="20" Source="check" VerticalOptions="End" HorizontalOptions="End" Margin="10"></Image>
+                            </Grid>
+                            <Grid>
+                                <ImageButton Source="primomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10" Clicked="FilterByPrimo">
+                                </ImageButton>
+                                <Label Text="Primo" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
+                                <Image x:Name="checkPrimo" IsVisible="false" WidthRequest="20" HeightRequest="20" Source="check" VerticalOptions="End" HorizontalOptions="End" Margin="10"></Image>
+                            </Grid>
+                            <Grid>
+                                <ImageButton Source="secondomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10" Clicked="FilterBySecondo">
+                                </ImageButton>
+                                <Label Text="Secondo" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
+                                <Image x:Name="checkSecondo" IsVisible="false" WidthRequest="20" HeightRequest="20" Source="check" VerticalOptions="End" HorizontalOptions="End" Margin="10"></Image>
+                            </Grid>
+                            <Grid>
+                                <ImageButton Source="contornomain" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10" Clicked="FilterByContorno">
+                                </ImageButton>
+                                <Label Text="Contorno" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
+                                <Image x:Name="checkContorno" IsVisible="false" WidthRequest="20" HeightRequest="20" Source="check" VerticalOptions="End" HorizontalOptions="End" Margin="10"></Image>
+                            </Grid>
+                            <Grid>
+                                <ImageButton Source="torta" Aspect="AspectFill" HeightRequest="100" WidthRequest="150" CornerRadius="10" Clicked="FilterByDolce">
+                                </ImageButton>
+                                <Label Text="Dolce" FontSize="Subtitle" TextColor="White" VerticalOptions="End" Margin="10"></Label>
+                                <Image x:Name="checkDolce" IsVisible="false" WidthRequest="20" HeightRequest="20" Source="check" VerticalOptions="End" HorizontalOptions="End" Margin="10"></Image>
+                            </Grid>
+                        </StackLayout>
+                    </ScrollView>
+                    <Frame Margin="10" Padding="0" CornerRadius="10" HeightRequest="200"  AbsoluteLayout.LayoutFlags="All">
+                        <Grid>
+                            <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Ricette}" IndicatorView="indicatorView">
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <ImageButton Source="{Binding Thumbnail}" Aspect="AspectFill" Clicked="OpenRicetta"></ImageButton>
 
-                                    <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
-                                        <magic:GradientView.GradientSource>
-                                            <magic:LinearGradient Angle="0">
-                                                <magic:GradientStop Color="#00000000" Offset="0.6" />
-                                                <magic:GradientStop Color="#aa000000" Offset="1" />
-                                            </magic:LinearGradient>
-                                        </magic:GradientView.GradientSource>
-                                    </magic:GradientView>
-                                    
-                                    <Label Text="{Binding Titolo}" HorizontalTextAlignment="Center" FontSize="Title" TextColor="White" Padding="15,0,0,20" HorizontalOptions="Start" VerticalOptions="End"/>
-                                </Grid>
-                            </DataTemplate>
-                        </CarouselView.ItemTemplate>
-                    </CarouselView>
-                    <IndicatorView x:Name="indicatorView"
-                   IndicatorColor="Gray"
-                   SelectedIndicatorColor="White"
-                   HorizontalOptions="Center"
+                                            <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
+                                                <magic:GradientView.GradientSource>
+                                                    <magic:LinearGradient Angle="0">
+                                                        <magic:GradientStop Color="#00000000" Offset="0.6" />
+                                                        <magic:GradientStop Color="#aa000000" Offset="1" />
+                                                    </magic:LinearGradient>
+                                                </magic:GradientView.GradientSource>
+                                            </magic:GradientView>
+
+                                            <Label Text="{Binding Titolo}" HorizontalTextAlignment="Center" FontSize="Title" TextColor="White" Padding="15,0,0,20" HorizontalOptions="Start" VerticalOptions="End"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CarouselView.ItemTemplate>
+                            </CarouselView>
+                            <IndicatorView x:Name="indicatorView"
+                               IndicatorColor="Gray"
+                               SelectedIndicatorColor="White"
+                               HorizontalOptions="Center"
                                VerticalOptions="End"
                                Padding="10"/>
-                </Grid>
-            </Frame>
+                        </Grid>
+                    </Frame>
 
-            <Label Text="Le ultime 10 ricette" FontSize="Title" Padding="10,0,0,0" TextColor="Black"></Label>
-        </StackLayout>
-
-
+                    <Label Text="Le ultime 10 ricette" FontSize="Title" Padding="10,0,0,0" TextColor="Black"></Label>
+                    <StackLayout x:Name="LastTenRecipes" BindableLayout.ItemsSource="{Binding Ricette}" Margin="0,0,0,10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Frame HasShadow="False" CornerRadius="10" Margin="10,10,10,0" HeightRequest="100" HorizontalOptions="FillAndExpand" Padding="0">
+                                    <Grid>
+                                        <ImageButton CornerRadius="10" HeightRequest="100" HorizontalOptions="FillAndExpand" Aspect="AspectFill" Source="{Binding Thumbnail}"></ImageButton>
+                                        <magic:GradientView HeightRequest="100" HorizontalOptions="FillAndExpand">
+                                            <magic:GradientView.GradientSource>
+                                                <magic:LinearGradient Angle="90">
+                                                    <magic:GradientStop Color="#55000000" Offset="0" />
+                                                    <magic:GradientStop Color="#55000000" Offset="1" />
+                                                </magic:LinearGradient>
+                                            </magic:GradientView.GradientSource>
+                                        </magic:GradientView>
+                                        <Label Text="{Binding Titolo}" TextColor="White" FontSize="25" VerticalOptions="Center" Margin="10,0,0,10"></Label>
+                                        <StackLayout Orientation="Horizontal" Margin="0,0,10,0" VerticalOptions="End" HorizontalOptions="Start">
+                                            <Image HeightRequest="25" WidthRequest="25" Source="clock" Margin="10,0,0,5" VerticalOptions="Center"></Image>
+                                            <Label Text="{Binding TempoPreparazione}" VerticalOptions="Center" TextColor="White"></Label>
+                                            <Label Text=" min."  VerticalOptions="Center" TextColor="White"></Label>
+                                            <Image HeightRequest="25" WidthRequest="25" Source="group" Margin="10,0,0,5" VerticalOptions="Center"></Image>
+                                            <Label Text="{Binding NumeroPersone}"  VerticalOptions="Center" TextColor="White"></Label>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
 
         <Button x:Name="settingsFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,210" Text="Impostazioni" TextColor="White" Padding="20,0,20,0" Image="settings" />
         <Button x:Name="favouriteFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,160" Text="Preferiti" TextColor="White" Padding="20,0,20,0" Image="favourite" />

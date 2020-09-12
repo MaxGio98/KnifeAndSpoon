@@ -34,9 +34,9 @@
                                 </Entry>
                             </StackLayout>
                             <StackLayout Orientation="Horizontal" Spacing="0">
-                                <Label Text="Categoria" TextColor="Black" FontSize="20" Margin="10,0,0,0"  VerticalOptions="Center">
+                                <Label Text="Categoria" TextColor="Black" FontSize="20" Margin="10,0,10,0"  VerticalOptions="Center">
                                 </Label>
-                                <Picker x:Name="Category" TextColor="Black" WidthRequest="200" VerticalOptions="Center">
+                                <Picker x:Name="Category" TextColor="Black" WidthRequest="100" VerticalOptions="Center">
 
                                 </Picker>
                             </StackLayout>

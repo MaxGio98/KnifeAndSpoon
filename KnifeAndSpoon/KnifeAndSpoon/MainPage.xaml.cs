@@ -28,25 +28,21 @@ namespace KnifeAndSpoon
 
         public async void CheckUser()
         {
-            Console.WriteLine("Inizio");
             if (CrossFirebaseAuth.Current.Instance.CurrentUser != null)
             {
+                loadOverlay.IsVisible = true;
                 var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
-                Console.WriteLine("Caricato");
-                Console.WriteLine(glob.Count);
                 if (glob.Count == 0)
                 {
-                    Console.WriteLine("Apertura");
+                    //Apertura pagina registrazione
                     PushPage(new RegisterPage());
-                    Console.WriteLine("Fine");
                 }
                 else
                 {
-                    Console.WriteLine("Apertura 2");
                     //Apertura pagina principale
                     App.Current.MainPage = new NavigationPage(new HomePage());
-                    Console.WriteLine("Fine 2");
                 }
+                loadOverlay.IsVisible = false;
             }
 
         }
