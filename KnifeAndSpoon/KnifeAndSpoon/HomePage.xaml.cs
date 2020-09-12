@@ -110,6 +110,22 @@ namespace KnifeAndSpoon
             addFab.FadeTo(0, 150);
         }
 
+        public void OpenRicettaById(object sender, EventArgs args)
+        {
+            String value=((Button)sender).CommandParameter.ToString();
+            Console.WriteLine(value);
+            BindableLayout.GetItemsSource(LastTenRecipes);
+            ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(LastTenRecipes);
+            for(int i = 0; i < temp.Count; i++)
+            {
+                if (temp[i].Id.Equals(value))
+                {
+                    PushPage(new ShowPage((Ricetta)temp[i], "Show"));
+                }
+            }
+            
+        }
+
         public void OpenRicetta(object sender, EventArgs args)
         {
             Console.WriteLine(TheCarousel.Position.ToString());

@@ -1,10 +1,14 @@
 ﻿using Plugin.CloudFirestore;
 using System.Collections.Generic;
+using Plugin.CloudFirestore.Attributes;
 
 namespace KnifeAndSpoon.Model
 {
     public class Ricetta
     {
+        [Id]
+        public string Id { get; set; }
+
         public string Autore { get; set; }
         public string Categoria { get; set; }
         public string NumeroPersone { get; set; }
