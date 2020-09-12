@@ -1,7 +1,9 @@
-﻿using Plugin.Permissions;
+﻿using Plugin.Media;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -131,11 +133,43 @@ namespace KnifeAndSpoon
         {
             if(await GetPermissions())
             {
-                await DisplayAlert("Ho tutte le autorizzazioni", "MMMMERICA FUCK YEAH", "OK");
+
+                string action = await DisplayActionSheet("Inserisci foto da...", "Annulla", null, "Fotocamera", "Galleria");
+                if(action.Equals("Fotocamera"))
+                {
+                    await CrossMedia.Current.Initialize();
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                    {
+                        DisplayAlert("No Camera", ":( No camera available.", "OK");
+                        return;
+                    }
+                    var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                    {
+                        Directory = "Sample",
+                        Name = "test.jpg"
+                    });
+                    if (file == null)
+                        return;
+                    imgToUpload.Source = ImageSource.FromStream(() =>
+                    {
+                        var stream = file.GetStream();
+                        return stream;
+                    });
+                }
+                else if(action.Equals("Galleria"))
+                {
+                    (sender as Button).IsEnabled = false;
+                    Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
+                    if (stream != null)
+                    {
+                        imgToUpload.Source = ImageSource.FromStream(() => stream);
+                    }
+                    (sender as Button).IsEnabled = true;
+                }
             }
             else
             {
-                await DisplayAlert("Oh shit", "Here we go again", "OK");
+                await DisplayAlert("Non ho le autorizzazioni necessarie", "Per favore approva tutto", "OK");
             }
         }
 
