@@ -13,7 +13,7 @@
                 <Image Source="antipastomain">
                 </Image>
                 <StackLayout>
-                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera"/>
+                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera" Clicked="checkPermissions"/>
 
                     <Frame CornerRadius="25"
                        HasShadow="False"

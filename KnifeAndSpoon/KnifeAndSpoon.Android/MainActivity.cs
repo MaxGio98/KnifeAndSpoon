@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using Plugin.GoogleClient;
 using ImageCircle.Forms.Plugin.Droid;
+using Plugin.Permissions;
 
 namespace KnifeAndSpoon.Droid
 {
@@ -33,9 +34,15 @@ namespace KnifeAndSpoon.Droid
             GoogleClientManager.OnAuthCompleted(requestCode, resultCode, data);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        /*public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }*/
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
