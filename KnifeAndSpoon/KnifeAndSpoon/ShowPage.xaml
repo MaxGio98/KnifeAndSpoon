@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
              xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
              mc:Ignorable="d"
+             BackgroundColor="White"
              x:Class="KnifeAndSpoon.ShowPage"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>

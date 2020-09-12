@@ -6,8 +6,9 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:KnifeAndSpoon"
              x:Class="KnifeAndSpoon.InsertPage"
+             BackgroundColor="White"
              NavigationPage.HasNavigationBar="False">
-    <Grid BackgroundColor="White">
+    <Grid>
         <ScrollView>
             <StackLayout Spacing="-140">
                 <Image Source="antipastomain" x:Name="imgToUpload">

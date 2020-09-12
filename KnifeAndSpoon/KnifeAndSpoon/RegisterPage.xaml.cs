@@ -55,10 +55,15 @@ namespace KnifeAndSpoon
             if (glob.Count == 0)
             {
                 //Completamento registrazione
+                Utente temp = new Utente();
+                temp.Immagine = CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl.ToString();
+                temp.Mail = CrossFirebaseAuth.Current.Instance.CurrentUser.Email;
+                temp.Nome = usr;
+                temp.isAdmin = false;
                 await CrossCloudFirestore.Current
                          .Instance
                          .GetCollection("Utenti")
-                         .AddDocumentAsync(new Utente(CrossFirebaseAuth.Current.Instance.CurrentUser.PhotoUrl.ToString(), CrossFirebaseAuth.Current.Instance.CurrentUser.Email,usr,false));
+                         .AddDocumentAsync(temp);
                 App.Current.MainPage = new NavigationPage(new HomePage());
             }
             else

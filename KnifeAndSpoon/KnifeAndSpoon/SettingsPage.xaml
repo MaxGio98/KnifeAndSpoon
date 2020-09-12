@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             mc:Ignorable="d"
+             BackgroundColor="White"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="KnifeAndSpoon.SettingsPage">
+    <ContentPage.Content>
+        <Grid>
+            <ImageButton Margin="10"  VerticalOptions="Start" HorizontalOptions="Start" HeightRequest="50" WidthRequest="50" CornerRadius="25" BackgroundColor="Transparent"  Source="backRed" Clicked="Back"></ImageButton>
+            <StackLayout VerticalOptions="Center">
+                <controls:CircleImage x:Name="ImgUtente" Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="200" WidthRequest="200">
+                </controls:CircleImage>
+                <Button Text="Cambia immagine profilo" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White"></Button>
+                <Button x:Name="approve" IsVisible="False" IsEnabled="False" Text="Approva le ricette" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White" Clicked="Approve"></Button>
+            </StackLayout>
+            <Button VerticalOptions="End" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,10" TextColor="White" Text="Effettua Log-Out"></Button>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

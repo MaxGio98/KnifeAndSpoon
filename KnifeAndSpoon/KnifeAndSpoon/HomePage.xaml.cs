@@ -23,6 +23,7 @@ namespace KnifeAndSpoon
         Boolean isFabsOpen;
         readonly Task autoCloseFabs;
         private bool isRefreshing;
+        private Utente utente;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
         public HomePage()
         {
@@ -132,6 +133,20 @@ namespace KnifeAndSpoon
             Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
             PushPage(new ShowPage(Ricette[TheCarousel.Position],"Show"));
         }
+
+        public void SettingsRedirect(object sender, EventArgs args)
+        {
+            if (utente.isAdmin)
+            {
+                PushPage(new SettingsPage("Admin"));
+            }
+            else
+            {
+                PushPage(new SettingsPage("Normal"));
+            }
+            
+        }
+
 
         public void SearchRedirect(object sender, EventArgs args)
         {
@@ -292,6 +307,7 @@ namespace KnifeAndSpoon
             List<Utente> list = glob.ToObjects<Utente>().ToList();
             userName.Text = list[0].Nome;
             ImgUtente.Source = list[0].Immagine;
+            this.utente = list[0];
         }
     }
 }

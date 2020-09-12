@@ -5,19 +5,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
              mc:Ignorable="d"
+             NavigationPage.HasNavigationBar="False"
              BackgroundColor="White"
-             x:Class="KnifeAndSpoon.SearchPage"
-             NavigationPage.HasNavigationBar="False">
+             x:Class="KnifeAndSpoon.ApprovePage">
     <ContentPage.Content>
         <Grid>
             <ScrollView>
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="10,10,10,10">
                         <ImageButton CornerRadius="25" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" Source="backRed" Clicked="Back"></ImageButton>
-                        <Entry x:Name="searchField" HorizontalOptions="FillAndExpand"></Entry>
-                        <ImageButton CornerRadius="25" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" Source="searchRed" Clicked="Search"></ImageButton>
+                        <Label TextColor="Black" FontSize="25" Text="Ricette da approvare"></Label>
                     </StackLayout>
-                    <StackLayout x:Name="SearchList" BindableLayout.ItemsSource="{Binding Ricette}" Margin="0,0,0,10">
+                    <StackLayout x:Name="List" BindableLayout.ItemsSource="{Binding Ricette}" Margin="0,0,0,10">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Frame HasShadow="False" CornerRadius="10" Margin="10,10,10,0" HeightRequest="100" HorizontalOptions="FillAndExpand" Padding="0">
