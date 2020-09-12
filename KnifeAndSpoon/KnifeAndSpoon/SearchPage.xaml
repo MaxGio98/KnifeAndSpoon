@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
+             mc:Ignorable="d"
+             x:Class="KnifeAndSpoon.SearchPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal" Margin="10,10,10,10">
+                        <ImageButton CornerRadius="25" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" Source="backRed" Clicked="Back"></ImageButton>
+                        <Entry x:Name="searchField" HorizontalOptions="FillAndExpand"></Entry>
+                        <ImageButton CornerRadius="25" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" Source="searchRed" Clicked="Search"></ImageButton>
+                    </StackLayout>
+                    <StackLayout x:Name="SearchList" BindableLayout.ItemsSource="{Binding Ricette}" Margin="0,0,0,10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Frame HasShadow="False" CornerRadius="10" Margin="10,10,10,0" HeightRequest="100" HorizontalOptions="FillAndExpand" Padding="0">
+                                    <Grid>
+                                        <Image HeightRequest="100" HorizontalOptions="FillAndExpand" Aspect="AspectFill" Source="{Binding Thumbnail}"></Image>
+                                        <magic:GradientView HeightRequest="100" HorizontalOptions="FillAndExpand">
+                                            <magic:GradientView.GradientSource>
+                                                <magic:LinearGradient Angle="90">
+                                                    <magic:GradientStop Color="#55000000" Offset="0" />
+                                                    <magic:GradientStop Color="#55000000" Offset="1" />
+                                                </magic:LinearGradient>
+                                            </magic:GradientView.GradientSource>
+                                        </magic:GradientView>
+                                        <Label Text="{Binding Titolo}" TextColor="White" FontSize="25" VerticalOptions="Center" Margin="10,0,0,10"></Label>
+                                        <StackLayout Orientation="Horizontal" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Start">
+                                            <Image HeightRequest="25" WidthRequest="25" Source="clock" Margin="10,0,0,0" VerticalOptions="Center"></Image>
+                                            <Label Text="{Binding TempoPreparazione}" VerticalOptions="Center" TextColor="White"></Label>
+                                            <Label Text=" min."  VerticalOptions="Center" TextColor="White"></Label>
+                                            <Image HeightRequest="25" WidthRequest="25" Source="group" Margin="10,0,0,0" VerticalOptions="Center"></Image>
+                                            <Label Text="{Binding NumeroPersone}"  VerticalOptions="Center" TextColor="White"></Label>
+                                        </StackLayout>
+                                        <Button CornerRadius="10" HeightRequest="100" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Clicked="OpenRicettaById" CommandParameter="{Binding Id}"></Button>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <Grid x:Name="loadOverlay" IsVisible="false">
+                <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <magic:GradientView.GradientSource>
+                        <magic:LinearGradient Angle="0">
+                            <magic:GradientStop Color="#55000000" Offset="0" />
+                            <magic:GradientStop Color="#55000000" Offset="1" />
+                        </magic:LinearGradient>
+                    </magic:GradientView.GradientSource>
+                </magic:GradientView>
+                <ActivityIndicator Color="White" IsRunning="true" Scale="0.2" WidthRequest="50" HeightRequest="50"></ActivityIndicator>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

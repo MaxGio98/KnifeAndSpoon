@@ -104,11 +104,11 @@
                                             </magic:GradientView.GradientSource>
                                         </magic:GradientView>
                                         <Label Text="{Binding Titolo}" TextColor="White" FontSize="25" VerticalOptions="Center" Margin="10,0,0,10"></Label>
-                                        <StackLayout Orientation="Horizontal" Margin="0,0,10,0" VerticalOptions="End" HorizontalOptions="Start">
-                                            <Image HeightRequest="25" WidthRequest="25" Source="clock" Margin="10,0,0,5" VerticalOptions="Center"></Image>
+                                        <StackLayout Orientation="Horizontal" Margin="0,0,0,10" VerticalOptions="End" HorizontalOptions="Start">
+                                            <Image HeightRequest="25" WidthRequest="25" Source="clock" Margin="10,0,0,0" VerticalOptions="Center"></Image>
                                             <Label Text="{Binding TempoPreparazione}" VerticalOptions="Center" TextColor="White"></Label>
                                             <Label Text=" min."  VerticalOptions="Center" TextColor="White"></Label>
-                                            <Image HeightRequest="25" WidthRequest="25" Source="group" Margin="10,0,0,5" VerticalOptions="Center"></Image>
+                                            <Image HeightRequest="25" WidthRequest="25" Source="group" Margin="10,0,0,0" VerticalOptions="Center"></Image>
                                             <Label Text="{Binding NumeroPersone}"  VerticalOptions="Center" TextColor="White"></Label>
                                         </StackLayout>
                                         <Button CornerRadius="10" HeightRequest="100" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" Clicked="OpenRicettaById" CommandParameter="{Binding Id}"></Button>
@@ -123,7 +123,7 @@
 
         <Button x:Name="settingsFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,210" Text="Impostazioni" TextColor="White" Padding="20,0,20,0" Image="settings" />
         <Button x:Name="favouriteFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,160" Text="Preferiti" TextColor="White" Padding="20,0,20,0" Image="favourite" />
-        <Button x:Name="searchFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,110" Text="Cerca" TextColor="White" Padding="20,0,20,0" Image="search" />
+        <Button x:Name="searchFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,110" Text="Cerca" TextColor="White" Padding="20,0,20,0" Image="search" Clicked="SearchRedirect"/>
         <Button x:Name="addFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,60" Text="Aggiungi" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="AddRedirect"/>
 
 

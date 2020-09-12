@@ -1,5 +1,6 @@
 ﻿using KnifeAndSpoon.Model;
 using Plugin.CloudFirestore;
+using Plugin.FirebaseAuth;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,6 +36,7 @@ namespace KnifeAndSpoon
                 refreshView.IsRefreshing = false;
             });
             refreshView.Command = refreshCommand;
+            LoadUtente();
             LoadRicette();
             LoadLastTen();
         }
@@ -113,8 +115,6 @@ namespace KnifeAndSpoon
         public void OpenRicettaById(object sender, EventArgs args)
         {
             String value=((Button)sender).CommandParameter.ToString();
-            Console.WriteLine(value);
-            BindableLayout.GetItemsSource(LastTenRecipes);
             ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(LastTenRecipes);
             for(int i = 0; i < temp.Count; i++)
             {
@@ -131,6 +131,11 @@ namespace KnifeAndSpoon
             Console.WriteLine(TheCarousel.Position.ToString());
             Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
             PushPage(new ShowPage(Ricette[TheCarousel.Position],"Show"));
+        }
+
+        public void SearchRedirect(object sender, EventArgs args)
+        {
+            PushPage(new SearchPage());
         }
 
         public void AddRedirect(object sender, EventArgs args)
@@ -281,10 +286,12 @@ namespace KnifeAndSpoon
             BindableLayout.SetItemsSource(LastTenRecipes, Ricette);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public async Task LoadUtente()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+            List<Utente> list = glob.ToObjects<Utente>().ToList();
+            userName.Text = list[0].Nome;
+            ImgUtente.Source = list[0].Immagine;
         }
     }
 }
