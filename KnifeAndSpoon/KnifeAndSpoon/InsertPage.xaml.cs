@@ -1,4 +1,7 @@
-﻿using Plugin.FirebaseStorage;
+﻿using KnifeAndSpoon.Model;
+using Plugin.CloudFirestore;
+using Plugin.FirebaseAuth;
+using Plugin.FirebaseStorage;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions;
@@ -288,7 +291,37 @@ namespace KnifeAndSpoon
                 var progress = e.TotalByteCount > 0 ? 100.0 * e.BytesTransferred / e.TotalByteCount : 0;
             };
             await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
-            Console.WriteLine(await reference.GetDownloadUrlAsync());
+            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+            List<Utente> list = glob.ToObjects<Utente>().ToList();
+            //Console.WriteLine(await reference.GetDownloadUrlAsync());
+            List<string> passaggi = new List<string>();
+            for (int i = 0; i < lst_passaggi.Children.Count; i++)
+            {
+                passaggi.Add(((Editor)((StackLayout)lst_passaggi.Children[i]).Children[1]).Text);
+            }
+            List<IDictionary<string, object>> ingredienti = new List<IDictionary<string, object>>();
+            for(int i=0;i<lst_ingredienti.Children.Count;i++)
+            {
+                IDictionary<string, object> ingrediente=new Dictionary<string,object>();
+                
+                ingrediente.Add("Nome", (((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[1]).Text));
+                ingrediente.Add("Quantità", ((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[2]).Text);
+                ingrediente.Add("Unità misura", ((Picker)((StackLayout)lst_ingredienti.Children[i]).Children[3]).SelectedItem.ToString());
+                ingredienti.Add(ingrediente);
+            }
+            Timestamp t = new Timestamp();
+            Ricetta ricetta = new Ricetta();
+            ricetta.Titolo = Name.Text.ToString();
+            ricetta.Autore = list[0].Id;
+            ricetta.Thumbnail = (await reference.GetDownloadUrlAsync()).ToString();
+            ricetta.Timestamp = t;
+            ricetta.Categoria = Category.SelectedItem.ToString();
+            ricetta.NumeroPersone = Servings.Text.ToString();
+            ricetta.TempoPreparazione = Time.Text.ToString();
+            ricetta.isApproved = false;
+            ricetta.Passaggi = passaggi;
+            ricetta.Ingredienti = ingredienti;
+            await CrossCloudFirestore.Current.Instance.GetCollection("Ricette").AddDocumentAsync(ricetta);
         }
     }
 }

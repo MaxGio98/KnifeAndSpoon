@@ -15,7 +15,7 @@ namespace KnifeAndSpoon.Model
         public string TempoPreparazione { get; set; }
         public string Thumbnail { get; set; }
         public string Titolo { get; set; }
-        public Timestamp TimeStamp { get; set; }
+        public Timestamp Timestamp { get; set; }
         public bool isApproved { get; set; }
         public List<string> Passaggi { get; set; }
         public List<IDictionary<string, object>> Ingredienti { get; set; }
