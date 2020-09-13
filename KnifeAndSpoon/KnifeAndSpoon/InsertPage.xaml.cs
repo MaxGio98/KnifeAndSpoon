@@ -166,7 +166,7 @@ namespace KnifeAndSpoon
                     {
                         AllowCropping = true,
                         CompressionQuality=10,
-                        Directory = "Sample",
+                        Directory = "Ricette",
                         Name = "test.jpg"
                     });
                     if (file == null)
@@ -200,14 +200,7 @@ namespace KnifeAndSpoon
                     {
                         var stream = file.GetStream();
                         return stream;
-                    });/*
-                    (sender as Button).IsEnabled = false;
-                    Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
-                    if (stream != null)
-                    {
-                        imgToUpload.Source = ImageSource.FromStream(() => stream);
-                    }
-                    (sender as Button).IsEnabled = true;*/
+                    });
 
                 }
             }
@@ -287,15 +280,15 @@ namespace KnifeAndSpoon
 
         public async void upload()
         {
-            
-            var reference = CrossFirebaseStorage.Current.Instance.RootReference.GetChild("popo.jpg");
-
+            string filename= Guid.NewGuid().ToString()+".jpg";
+            var reference = CrossFirebaseStorage.Current.Instance.RootReference.GetChild(filename);
             var uploadProgress = new Progress<IUploadState>();
             uploadProgress.ProgressChanged += (sender, e) =>
             {
                 var progress = e.TotalByteCount > 0 ? 100.0 * e.BytesTransferred / e.TotalByteCount : 0;
             };
             await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
+            Console.WriteLine(await reference.GetDownloadUrlAsync());
         }
     }
 }
