@@ -6,6 +6,7 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:KnifeAndSpoon"
              x:Class="KnifeAndSpoon.InsertPage"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
              BackgroundColor="White"
              NavigationPage.HasNavigationBar="False">
     <Grid>
@@ -57,6 +58,16 @@
             </StackLayout>
         </ScrollView>
         <Button x:Name="confirmFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,10,10" Text="Pubblica" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="publishRecipeToFirebase"/>
-
+        <Grid x:Name="loadOverlay" IsVisible="false">
+            <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <magic:GradientView.GradientSource>
+                    <magic:LinearGradient Angle="0">
+                        <magic:GradientStop Color="#55000000" Offset="0" />
+                        <magic:GradientStop Color="#55000000" Offset="1" />
+                    </magic:LinearGradient>
+                </magic:GradientView.GradientSource>
+            </magic:GradientView>
+            <ActivityIndicator Color="White" IsRunning="true" Scale="0.2" WidthRequest="50" HeightRequest="50"></ActivityIndicator>
+        </Grid>
     </Grid>
 </ContentPage>

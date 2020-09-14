@@ -16,6 +16,7 @@ namespace KnifeAndSpoon
     public partial class FavouritePage : ContentPage
     {
         Utente utente;
+        List<String> oldFav;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
 
         public FavouritePage(Utente usr)
@@ -33,15 +34,15 @@ namespace KnifeAndSpoon
             }
             else
             {
+                List<Ricetta> ricette = new List<Ricetta>();
                 for (int i = 0; i < utente.Preferiti.Count; i++)
                 {
                     var group = await CrossCloudFirestore.Current.Instance.GetCollection("Ricette").WhereEqualsTo(FieldPath.DocumentId, utente.Preferiti[i]).GetDocumentsAsync();
-                    List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
-                    Ricette = new ObservableCollection<Ricetta>(ricette);
-                    BindableLayout.SetItemsSource(FavouriteList, Ricette);
+                    ricette.AddRange(group.ToObjects<Ricetta>().ToList());
+                    
                 }
-                
-
+                Ricette = new ObservableCollection<Ricetta>(ricette);
+                BindableLayout.SetItemsSource(FavouriteList, Ricette);
             }
 
         }
@@ -53,6 +54,7 @@ namespace KnifeAndSpoon
 
         public void OpenRicettaById(object sender, EventArgs args)
         {
+            oldFav = utente.Preferiti;
             String value = ((Button)sender).CommandParameter.ToString();
             System.Collections.ObjectModel.ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(FavouriteList);
             for (int i = 0; i < temp.Count; i++)
@@ -67,6 +69,11 @@ namespace KnifeAndSpoon
         public async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
+        }
+
+        protected virtual void OnResume()
+        {
+            loadFavRicette();
         }
     }
 }

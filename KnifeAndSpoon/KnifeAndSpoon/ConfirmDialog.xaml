@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
+             mc:Ignorable="d"
+             BackgroundColor="Transparent"
+             x:Class="KnifeAndSpoon.ConfirmDialog">
+    <ContentPage.Content>
+        <Grid>
+            <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <magic:GradientView.GradientSource>
+                    <magic:LinearGradient Angle="0">
+                        <magic:GradientStop Color="#22000000" Offset="0" />
+                        <magic:GradientStop Color="#22000000" Offset="1" />
+                    </magic:LinearGradient>
+                </magic:GradientView.GradientSource>
+            </magic:GradientView>
+            <Frame Margin="20" VerticalOptions="Center" HorizontalOptions="Center" Padding="20" CornerRadius="10">
+                <StackLayout>
+                    <Label x:Name="label" HorizontalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" FontSize="20"></Label>
+                    <StackLayout Orientation="Horizontal">
+                        <Button x:Name="ok" VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="FillAndExpand" Margin="0,0,10,0" Text="Si" TextColor="White"></Button>
+                        <Button x:Name="no" VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="FillAndExpand" Margin="0,0,10,0" Text="No" TextColor="White"></Button>
+                        <Button x:Name="abort" VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="FillAndExpand" Margin="0,0,10,0" Text="Annulla" TextColor="White"></Button>
+                    </StackLayout>
+
+                </StackLayout>
+            </Frame>
+        </Grid>
+        
+
+    </ContentPage.Content>
+</ContentPage>

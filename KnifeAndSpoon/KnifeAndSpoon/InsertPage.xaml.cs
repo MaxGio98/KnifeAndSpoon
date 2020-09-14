@@ -71,6 +71,7 @@ namespace KnifeAndSpoon
             qt.TextChanged += OnTextChanged;
             stack.Children.Add(qt);
             Picker ut = new Picker();
+            ut.HorizontalTextAlignment = TextAlignment.End;
             ut.Items.Add("unità");
             ut.Items.Add("grammi");
             ut.Items.Add("kg");
@@ -80,6 +81,22 @@ namespace KnifeAndSpoon
             ut.Items.Add("cucchiaino");
             ut.Items.Add("millilitri");
             ut.Items.Add("q.b.");
+            ut.SelectedIndexChanged += (object s, EventArgs e) =>
+            {
+                ut.Unfocus();
+                if (ut.SelectedItem.Equals("q.b."))
+                {
+                    qt.Text = "0";
+                    qt.IsVisible = false;
+                    qt.IsEnabled = false;
+                }
+                else
+                {
+                    qt.Text = "";
+                    qt.IsVisible = true;
+                    qt.IsEnabled = true;
+                }
+            };
             ut.SelectedIndex = 0;
             ut.FontSize = 20;
             ut.TextColor = Color.Black;
@@ -158,54 +175,57 @@ namespace KnifeAndSpoon
             {
 
                 string action = await DisplayActionSheet("Inserisci foto da...", "Annulla", null, "Fotocamera", "Galleria");
-                if(action.Equals("Fotocamera"))
+                if (action != null)
                 {
-                    await CrossMedia.Current.Initialize();
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                    if (action.Equals("Fotocamera"))
                     {
-                        DisplayAlert("No Camera", ":( No camera available.", "OK");
-                        return;
+                        await CrossMedia.Current.Initialize();
+                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+                        {
+                            DisplayAlert("No Camera", ":( No camera available.", "OK");
+                            return;
+                        }
+                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                        {
+                            AllowCropping = true,
+                            CompressionQuality = 1,
+                            Directory = "Ricette",
+                            Name = "test.jpg"
+                        });
+                        if (file == null)
+                            return;
+                        imgFile = file;
+                        imgToUpload.Source = ImageSource.FromStream(() =>
+                        {
+                            var stream = file.GetStream();
+                            return stream;
+                        });
                     }
-                    var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                    else if (action.Equals("Galleria"))
                     {
-                        AllowCropping = true,
-                        CompressionQuality=1,
-                        Directory = "Ricette",
-                        Name = "test.jpg"
-                    });
-                    if (file == null)
-                        return;
-                    imgFile = file;
-                    imgToUpload.Source = ImageSource.FromStream(() =>
-                    {
-                        var stream = file.GetStream();
-                        return stream;
-                    });
-                }
-                else if(action.Equals("Galleria"))
-                {
-                    if (!CrossMedia.Current.IsPickPhotoSupported)
-                    {
-                        DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
-                        return;
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                            return;
+                        }
+                        var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+                        {
+                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                            CompressionQuality = 1
+                        });
+
+
+                        if (file == null)
+                            return;
+
+                        imgFile = file;
+                        imgToUpload.Source = ImageSource.FromStream(() =>
+                        {
+                            var stream = file.GetStream();
+                            return stream;
+                        });
+
                     }
-                    var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
-                    {
-                        PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                        CompressionQuality=1
-                    });
-
-
-                    if (file == null)
-                        return;
-
-                    imgFile = file;
-                    imgToUpload.Source = ImageSource.FromStream(() =>
-                    {
-                        var stream = file.GetStream();
-                        return stream;
-                    });
-
                 }
             }
             else
@@ -272,55 +292,211 @@ namespace KnifeAndSpoon
         {
             if (imgFile == null)
             {
-                Console.WriteLine("OHHHH");
+                Navigation.PushModalAsync(new ErrorDialog("Inserisci un'immagine della ricetta"));
             }
             else
             {
                 upload();
             }
-
-            
         }
 
         public async void upload()
         {
-            string filename= Guid.NewGuid().ToString()+".jpg";
-            var reference = CrossFirebaseStorage.Current.Instance.RootReference.GetChild(filename);
-            var uploadProgress = new Progress<IUploadState>();
-            uploadProgress.ProgressChanged += (sender, e) =>
-            {
-                var progress = e.TotalByteCount > 0 ? 100.0 * e.BytesTransferred / e.TotalByteCount : 0;
-            };
-            await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
-            //Console.WriteLine(await reference.GetDownloadUrlAsync());
-            List<string> passaggi = new List<string>();
-            for (int i = 0; i < lst_passaggi.Children.Count; i++)
-            {
-                passaggi.Add(((Editor)((StackLayout)lst_passaggi.Children[i]).Children[1]).Text);
-            }
-            List<IDictionary<string, object>> ingredienti = new List<IDictionary<string, object>>();
-            for(int i=0;i<lst_ingredienti.Children.Count;i++)
-            {
-                IDictionary<string, object> ingrediente=new Dictionary<string,object>();
-                
-                ingrediente.Add("Nome", (((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[1]).Text));
-                ingrediente.Add("Quantità", ((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[2]).Text);
-                ingrediente.Add("Unità misura", ((Picker)((StackLayout)lst_ingredienti.Children[i]).Children[3]).SelectedItem.ToString());
-                ingredienti.Add(ingrediente);
-            }
+            
+            //Inizializzazione Ricetta
             Timestamp t = new Timestamp(DateTime.Now);
             Ricetta ricetta = new Ricetta();
-            ricetta.Titolo = Name.Text.ToString();
+            //Controlli sui campi
+            if (Name.Text!=null)
+            {
+                if (!Name.Text.Trim().Equals(""))
+                {
+                    ricetta.Titolo = Name.Text;
+                }
+                else
+                {
+                    Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
+                    return;
+                }
+                
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
+                return;
+            }
+            
             ricetta.Autore = utente.Id;
-            ricetta.Thumbnail = (await reference.GetDownloadUrlAsync()).ToString();
+
             ricetta.Timestamp = t;
+
             ricetta.Categoria = Category.SelectedItem.ToString();
-            ricetta.NumeroPersone = Servings.Text.ToString();
-            ricetta.TempoPreparazione = Time.Text.ToString();
+
+            if (Time.Text != null)
+            {
+                if(!Time.Text.Trim().Equals(""))
+                {
+                    ricetta.TempoPreparazione = Time.Text.ToString();
+                }
+                
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Controlla il tempo di preparazione"));
+                return;
+            }
+            
+            if (Servings.Text != null)
+            {
+                if (!Servings.Text.Trim().Equals(""))
+                {
+                    ricetta.NumeroPersone = Servings.Text.ToString();
+                }
+                else
+                {
+                    Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
+                    return;
+                }
+                
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
+                return;
+            }
+
+
+ 
             ricetta.isApproved = false;
+
+            List<IDictionary<string, object>> ingredienti = new List<IDictionary<string, object>>();
+            if (lst_ingredienti.Children.Count != 0)
+            {
+                for (int i = 0; i < lst_ingredienti.Children.Count; i++)
+                {
+                    IDictionary<string, object> ingrediente = new Dictionary<string, object>();
+                    string nome = (((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[1]).Text);
+                    if (nome != null)
+                    {
+                        if (!nome.Trim().Equals(""))
+                        {
+                            ingrediente.Add("Nome", nome);
+                        }
+                        else
+                        {
+                            Navigation.PushModalAsync(new ErrorDialog("Il nome dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Navigation.PushModalAsync(new ErrorDialog("Il nome dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                        return;
+                    }
+
+
+                    string unit = ((Picker)((StackLayout)lst_ingredienti.Children[i]).Children[3]).SelectedItem.ToString();
+                    ingrediente.Add("Unità misura", unit);
+
+                    string quant = ((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[2]).Text;
+                    if (!unit.Equals("q.b."))
+                    {
+                        if (quant != null)
+                        {
+                            if (!quant.Trim().Equals(""))
+                            {
+                                if (int.Parse(quant) > 0)
+                                {
+                                    ingrediente.Add("Quantità", quant);
+                                }
+                                else
+                                {
+                                    Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " non può essere 0"));
+                                    return;
+                                }
+                                
+                            }
+                            else
+                            {
+                                Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                                return;
+                            }
+                            
+                        }
+                        else
+                        {
+                            Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                            return;
+                        }
+
+                    }
+                    else
+                    {
+                        ingrediente.Add("Quantità", quant);
+                    }
+
+                    ingredienti.Add(ingrediente);
+                }
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un ingrediente"));
+                return;
+            }
+
+            List<string> passaggi = new List<string>();
+            if(lst_passaggi.Children.Count!=0)
+            {
+                for (int i = 0; i < lst_passaggi.Children.Count; i++)
+                {
+                    string pass = ((Editor)((StackLayout)lst_passaggi.Children[i]).Children[1]).Text;
+                    if (pass != null)
+                    {
+                        if (!pass.Trim().Equals(""))
+                        {
+                            passaggi.Add(pass);
+                        }
+                        else
+                        {
+                            Navigation.PushModalAsync(new ErrorDialog("Il passaggio n°" + (i + 1) + " è vuoto"));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Navigation.PushModalAsync(new ErrorDialog("Il passaggio n°" + (i + 1) + " è vuoto"));
+                        return;
+                    }
+
+                }
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un passaggio"));
+                return;
+            }
+           
             ricetta.Passaggi = passaggi;
             ricetta.Ingredienti = ingredienti;
-            await CrossCloudFirestore.Current.Instance.GetCollection("Ricette").AddDocumentAsync(ricetta);
+
+            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?", new Command(
+                async() => {
+                    await Navigation.PopModalAsync();
+                    //Upload Immagine
+                    loadOverlay.IsVisible = true;
+                    string filename = Guid.NewGuid().ToString() + ".jpg";
+                    var reference = CrossFirebaseStorage.Current.Instance.RootReference.GetChild(filename);
+                    var uploadProgress = new Progress<IUploadState>();
+                    uploadProgress.ProgressChanged += (sender, e) =>
+                    {
+                        var progress = e.TotalByteCount > 0 ? 100.0 * e.BytesTransferred / e.TotalByteCount : 0;
+                    };
+                    await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
+                    ricetta.Thumbnail = (await reference.GetDownloadUrlAsync()).ToString();
+                    await CrossCloudFirestore.Current.Instance.GetCollection("Ricette").AddDocumentAsync(ricetta);
+                    await Navigation.PushModalAsync(new ErrorDialog("La tua ricetta è in fase di approvazione"));
+                    await Navigation.PopAsync();
+                })));
         }
     }
 }

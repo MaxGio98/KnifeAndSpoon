@@ -27,7 +27,7 @@
                     </Grid>
                     
                     <StackLayout>
-                        <Button x:Name="multiFab" Clicked="setPreferitiToFirebase" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White"/>
+                        <Button x:Name="multiFab" Clicked="multiFabAction" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White"/>
 
                         <Frame CornerRadius="25"
                        HasShadow="False"

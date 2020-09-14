@@ -28,10 +28,12 @@ namespace KnifeAndSpoon
             r = ricetta;
             utente = usr;
             //Apply show mode
-            if (Mode == "Show")
+            if (Mode.Equals("Show"))
             {
                 multiFab.ImageSource = "favourite";
-            }else if (Mode == "Admin")
+                setPreferiti();
+            }
+            else if (Mode.Equals("Admin"))
             {
                 multiFab.ImageSource = "more";
             }
@@ -78,7 +80,7 @@ namespace KnifeAndSpoon
             ObservableCollection<Passaggio> Passaggi = new ObservableCollection<Passaggio>(passaggi);
             BindableLayout.SetItemsSource(lst_passaggi, Passaggi);
             LoadUtente(ricetta.Autore);
-            setPreferiti();
+            
         }
 
         public void showCategoria(String categoria)
@@ -187,20 +189,30 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void setPreferitiToFirebase(object sender, EventArgs e)
+        public async void multiFabAction(object sender, EventArgs e)
         {
-            if(isFav)
+            if (Mode.Equals("Show"))
             {
-                isFav = false;
-                utente.Preferiti.Remove(r.Id);
-                await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
+                if (isFav)
+                {
+                    isFav = false;
+                    utente.Preferiti.Remove(r.Id);
+                    await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
+                    multiFab.ImageSource = "favourite";
+                }
+                else
+                {
+                    isFav = true;
+                    utente.Preferiti.Add(r.Id);
+                    await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
+                    multiFab.ImageSource = "favourite_full";
+                }
             }
             else
             {
-                isFav = true;
-                utente.Preferiti.Add(r.Id);
-                await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
+                //TODO
             }
+            
         }
 
     }

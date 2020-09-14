@@ -15,7 +15,7 @@
                 <StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="10,10,10,10">
                         <ImageButton CornerRadius="25" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" Source="backRed" Clicked="Back"></ImageButton>
-                        <Label Text="I tuoi preferiti" TextColor="Black" FontSize="20"></Label>
+                        <Label TextColor="Black" FontSize="25" Text="Ricette da approvare"></Label>
                     </StackLayout>
                     <StackLayout x:Name="FavouriteList" BindableLayout.ItemsSource="{Binding Ricette}" Margin="0,0,0,10">
                         <BindableLayout.ItemTemplate>
