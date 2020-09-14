@@ -1,5 +1,6 @@
 ﻿using KnifeAndSpoon.Model;
 using Plugin.CloudFirestore;
+using Plugin.FirebaseAuth;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,10 +18,14 @@ namespace KnifeAndSpoon
     {
         Utente Autore;
         String Mode;
+        private Ricetta r;
+        private Boolean isFav=false;
+        private List<Utente> list;
         public ShowPage(Ricetta ricetta,String Mode)
         {
             this.Mode = Mode;
             InitializeComponent();
+            r = ricetta;
 
             //Apply show mode
             if (Mode == "Show")
@@ -73,6 +78,8 @@ namespace KnifeAndSpoon
             ObservableCollection<Passaggio> Passaggi = new ObservableCollection<Passaggio>(passaggi);
             BindableLayout.SetItemsSource(lst_passaggi, Passaggi);
             LoadUtente(ricetta.Autore);
+
+            setPreferiti();
         }
 
         public void showCategoria(String categoria)
@@ -160,6 +167,44 @@ namespace KnifeAndSpoon
                 }
             }
             return correctForm;
+        }
+
+        public async void setPreferiti()
+        {
+            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+            list = glob.ToObjects<Utente>().ToList();
+            for (int i = 0; i < list[0].Preferiti.Count; i++)
+            {
+                if(list[0].Preferiti[i].Equals(r.Id))
+                {
+                    isFav = true;
+                }
+            }
+            if(isFav)
+            {
+                await DisplayAlert("E' un preferito", "Già", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Non e' un preferito", "Già", "OK");
+
+            }
+        }
+
+        public async void setPreferitiToFirebase(object sender, EventArgs e)
+        {
+            if(isFav)
+            {
+                isFav = false;
+                list[0].Preferiti.Remove(r.Id);
+                await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(list[0].Id).UpdateDataAsync("Preferiti", list[0].Preferiti);
+            }
+            else
+            {
+                isFav = true;
+                list[0].Preferiti.Add(r.Id);
+                await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(list[0].Id).UpdateDataAsync("Preferiti", list[0].Preferiti);
+            }
         }
 
     }

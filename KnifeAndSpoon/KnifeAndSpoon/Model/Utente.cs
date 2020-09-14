@@ -14,6 +14,8 @@ namespace KnifeAndSpoon.Model
         public string Mail { get; set; }
         public string Nome { get; set; }
         public bool isAdmin { get; set; }
+        public List<string> Preferiti { get; set; }
+
 
         /*public Utente(String img, String mail, String nome, bool admin)
         {
