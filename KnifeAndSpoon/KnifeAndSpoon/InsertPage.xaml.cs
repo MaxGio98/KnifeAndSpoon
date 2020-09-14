@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,8 +23,8 @@ namespace KnifeAndSpoon
         private int count_ingredienti = 0;
         private int count_passaggi = 0;
         private MediaFile imgFile=null;
-        private List<Utente> list;
-        public InsertPage(List<Utente> list)
+        private Utente utente;
+        public InsertPage(Utente usr)
         {
             InitializeComponent();
             this.Category.Items.Add("Antipasto");
@@ -35,7 +34,7 @@ namespace KnifeAndSpoon
             this.Category.Items.Add("Dolce");
             this.Category.SelectedIndex = 0;
             this.Title = "Nuova ricetta";
-            this.list = list;
+            utente = usr;
             Servings.TextChanged += OnTextChanged;
             Time.TextChanged += OnTextChanged;
         }
@@ -170,7 +169,7 @@ namespace KnifeAndSpoon
                     var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
                         AllowCropping = true,
-                        CompressionQuality=10,
+                        CompressionQuality=1,
                         Directory = "Ricette",
                         Name = "test.jpg"
                     });
@@ -193,7 +192,7 @@ namespace KnifeAndSpoon
                     var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
                     {
                         PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                        CompressionQuality=10
+                        CompressionQuality=1
                     });
 
 
@@ -309,10 +308,10 @@ namespace KnifeAndSpoon
                 ingrediente.Add("Unità misura", ((Picker)((StackLayout)lst_ingredienti.Children[i]).Children[3]).SelectedItem.ToString());
                 ingredienti.Add(ingrediente);
             }
-            Timestamp t = new Timestamp();
+            Timestamp t = new Timestamp(DateTime.Now);
             Ricetta ricetta = new Ricetta();
             ricetta.Titolo = Name.Text.ToString();
-            ricetta.Autore = list[0].Id;
+            ricetta.Autore = utente.Id;
             ricetta.Thumbnail = (await reference.GetDownloadUrlAsync()).ToString();
             ricetta.Timestamp = t;
             ricetta.Categoria = Category.SelectedItem.ToString();

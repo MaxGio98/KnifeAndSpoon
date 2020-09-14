@@ -208,9 +208,6 @@
     <AndroidResource Include="Resources\drawable\pencil.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\favourite.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\g_logo.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -257,10 +254,10 @@
     <AndroidResource Include="Resources\drawable\more.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\favorite.xml" />
+    <AndroidResource Include="Resources\drawable\favourite.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\favorite_full.xml" />
+    <AndroidResource Include="Resources\drawable\favourite_full.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\remove.xml" />

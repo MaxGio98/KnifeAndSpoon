@@ -17,7 +17,7 @@
                 <Button Text="Cambia immagine profilo" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White"></Button>
                 <Button x:Name="approve" IsVisible="False" IsEnabled="False" Text="Approva le ricette" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White" Clicked="Approve"></Button>
             </StackLayout>
-            <Button VerticalOptions="End" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,10" TextColor="White" Text="Effettua Log-Out"></Button>
+            <Button VerticalOptions="End" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,10" TextColor="White" Text="Effettua Log-Out" Clicked="LogOut"></Button>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

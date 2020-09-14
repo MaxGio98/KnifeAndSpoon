@@ -64,7 +64,7 @@
                                 <CarouselView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <ImageButton Source="{Binding Thumbnail}" Aspect="AspectFill" Clicked="OpenRicetta"></ImageButton>
+                                            <ImageButton Source="{Binding Thumbnail}" Aspect="AspectFill" Clicked="OpenRicetta" CommandParameter="{Binding Id}"></ImageButton>
 
                                             <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
                                                 <magic:GradientView.GradientSource>
@@ -123,7 +123,7 @@
         </RefreshView>
 
         <Button x:Name="settingsFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,210" Text="Impostazioni" TextColor="White" Padding="20,0,20,0" Image="settings" Clicked="SettingsRedirect"/>
-        <Button x:Name="favouriteFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,160" Text="Preferiti" TextColor="White" Padding="20,0,20,0" Clicked="openFavorite" Image="favourite" />
+        <Button x:Name="favouriteFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,160" Text="Preferiti" TextColor="White" Padding="20,0,20,0" Clicked="openFavorite" Image="favourite_full" />
         <Button x:Name="searchFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,110" Text="Cerca" TextColor="White" Padding="20,0,20,0" Image="search" Clicked="SearchRedirect"/>
         <Button x:Name="addFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,-200,60" Text="Aggiungi" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="AddRedirect"/>
 

@@ -24,7 +24,6 @@ namespace KnifeAndSpoon
         readonly Task autoCloseFabs;
         private bool isRefreshing;
         private Utente utente;
-        List<Utente> list;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
         public HomePage()
         {
@@ -41,6 +40,7 @@ namespace KnifeAndSpoon
             LoadUtente();
             LoadRicette();
             LoadLastTen();
+            TheCarousel.Position = 0;
         }
 
         private async Task RefreshData()
@@ -122,7 +122,7 @@ namespace KnifeAndSpoon
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Show",list));
+                    PushPage(new ShowPage((Ricetta)temp[i], "Show",utente));
                 }
             }
             
@@ -130,20 +130,25 @@ namespace KnifeAndSpoon
 
         public void OpenRicetta(object sender, EventArgs args)
         {
-            Console.WriteLine(TheCarousel.Position.ToString());
-            Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
-            PushPage(new ShowPage(Ricette[TheCarousel.Position],"Show",list));
+            String id=((ImageButton)sender).CommandParameter.ToString();
+            for (int i = 0; i < Ricette.Count; i++)
+            {
+                if (Ricette[i].Id.Equals(id))
+                {
+                    PushPage(new ShowPage(Ricette[i], "Show", utente));
+                }
+            }
         }
 
         public void SettingsRedirect(object sender, EventArgs args)
         {
             if (utente.isAdmin)
             {
-                PushPage(new SettingsPage("Admin",list));
+                PushPage(new SettingsPage("Admin",utente));
             }
             else
             {
-                PushPage(new SettingsPage("Normal",list));
+                PushPage(new SettingsPage("Normal",utente));
             }
             
         }
@@ -152,17 +157,17 @@ namespace KnifeAndSpoon
         {
             Console.WriteLine(TheCarousel.Position.ToString());
             Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
-            PushPage(new FavoritePage(list ));
+            PushPage(new FavouritePage(utente));
         }
 
         public void SearchRedirect(object sender, EventArgs args)
         {
-            PushPage(new SearchPage(list));
+            PushPage(new SearchPage(utente));
         }
 
         public void AddRedirect(object sender, EventArgs args)
         {
-            PushPage(new InsertPage(list));
+            PushPage(new InsertPage(utente));
         }
 
         public async void PushPage(ContentPage page)
@@ -311,7 +316,7 @@ namespace KnifeAndSpoon
         public async Task LoadUtente()
         {
             var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
-            list = glob.ToObjects<Utente>().ToList();
+            List<Utente> list = glob.ToObjects<Utente>().ToList();
             userName.Text = list[0].Nome;
             ImgUtente.Source = list[0].Immagine;
             this.utente = list[0];
