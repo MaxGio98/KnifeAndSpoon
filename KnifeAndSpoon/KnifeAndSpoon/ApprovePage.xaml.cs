@@ -20,7 +20,7 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             utente = usr;
-            LoadAsync(); 
+            LoadAsync();
         }
 
         public async void LoadAsync()
@@ -49,7 +49,12 @@ namespace KnifeAndSpoon
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Admin", utente));
+                    ShowPage page = new ShowPage((Ricetta)temp[i], "Admin", utente);
+                    page.enableBackReturn(new Command(() =>
+                    {
+                        LoadAsync();
+                    }));
+                    PushPage(page);
                 }
             }
 

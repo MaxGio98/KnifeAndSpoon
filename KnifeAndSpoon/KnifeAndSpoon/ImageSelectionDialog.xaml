@@ -6,7 +6,7 @@
              xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
              mc:Ignorable="d"
              BackgroundColor="Transparent"
-             x:Class="KnifeAndSpoon.ErrorDialog">
+             x:Class="KnifeAndSpoon.ImageSelectionDialog">
     <ContentPage.Content>
         <Grid>
             <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -17,12 +17,18 @@
                     </magic:LinearGradient>
                 </magic:GradientView.GradientSource>
             </magic:GradientView>
-            <Frame Margin="20" VerticalOptions="Center" HorizontalOptions="Center" Padding="20" CornerRadius="10">
+            <Frame Margin="20" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Padding="20" CornerRadius="10">
                 <StackLayout>
                     <Label x:Name="label" HorizontalTextAlignment="Center" VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" FontSize="20"></Label>
-                    <Button VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="Center" Margin="0,0,10,0" Text="Ok" TextColor="White" Clicked="okButton"></Button>
+                    <StackLayout>
+                        <Button x:Name="Fotocamera" VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="FillAndExpand" Margin="0,0,10,0" Text="Fotocamera" TextColor="White"></Button>
+                        <Button x:Name="Galleria" VerticalOptions="Center" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="FillAndExpand" Margin="0,0,10,0" Text="Galleria" TextColor="White"></Button>
+                    </StackLayout>
+                    <Button x:Name="abort" VerticalOptions="Center" BackgroundColor="White" CornerRadius="25" HorizontalOptions="End" Margin="0,10,10,0" Text="Annulla" TextColor="#b10000"></Button>
                 </StackLayout>
             </Frame>
         </Grid>
+
+
     </ContentPage.Content>
 </ContentPage>

@@ -24,11 +24,15 @@ namespace KnifeAndSpoon
         readonly Task autoCloseFabs;
         private bool isRefreshing;
         private Utente utente;
+        CancellationTokenSource cts;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
         public HomePage()
         {
             isFabsOpen = false;
             InitializeComponent();
+            if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
+            {
+            }
             ICommand refreshCommand = new Command(async () =>
             {
                 // IsRefreshing is true
@@ -49,30 +53,47 @@ namespace KnifeAndSpoon
             await LoadLastTen();
         }
 
+
         public void OpenFabs(object sender, EventArgs args)
         {
             if (isFabsOpen == false)
             {
                 //Visualizza i pulsanti
                 isFabsOpen = !isFabsOpen;
-                Device.StartTimer(new TimeSpan(0, 0, 10), () =>
+                try
                 {
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (cts != null)
                     {
-                        isFabsOpen = !isFabsOpen;
-                        mainFab.RotateTo(-45, 150);
-                        settingsFab.TranslateTo(0, 0, 150);
-                        settingsFab.FadeTo(0, 150); ;
-                        favouriteFab.TranslateTo(0, 0, 150);
-                        favouriteFab.FadeTo(0, 150);
-                        searchFab.TranslateTo(0, 0, 150);
-                        searchFab.FadeTo(0, 150);
-                        addFab.TranslateTo(0, 0, 150);
-                        addFab.FadeTo(0, 150);
-                    });
-                    return false;
-                });
-                
+                        cts = new CancellationTokenSource();
+                    }
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(5000);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            isFabsOpen = !isFabsOpen;
+                            mainFab.RotateTo(-45, 150);
+                            settingsFab.TranslateTo(0, 0, 150);
+                            settingsFab.FadeTo(0, 150); ;
+                            favouriteFab.TranslateTo(0, 0, 150);
+                            favouriteFab.FadeTo(0, 150);
+                            searchFab.TranslateTo(0, 0, 150);
+                            searchFab.FadeTo(0, 150);
+                            addFab.TranslateTo(0, 0, 150);
+                            addFab.FadeTo(0, 150);
+                        });
+                    },cts.Token);
+                }
+                // *** If cancellation is requested, an OperationCanceledException results.
+                catch (OperationCanceledException e)
+                {
+                    Console.WriteLine("Cancel ex {0}", e.Message);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("ex {0}", e.Message);
+                }
+
                 mainFab.RotateTo(45, 150);
                 settingsFab.TranslateTo(-210, 0, 150);
                 settingsFab.FadeTo(255, 150);
@@ -85,6 +106,7 @@ namespace KnifeAndSpoon
             }
             else
             {
+                cts.Cancel();
                 //Nascondi i pulsanti
                 isFabsOpen = !isFabsOpen;
                 mainFab.RotateTo(-45, 150);
@@ -116,21 +138,21 @@ namespace KnifeAndSpoon
 
         public void OpenRicettaById(object sender, EventArgs args)
         {
-            String value=((Button)sender).CommandParameter.ToString();
+            String value = ((Button)sender).CommandParameter.ToString();
             ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(LastTenRecipes);
-            for(int i = 0; i < temp.Count; i++)
+            for (int i = 0; i < temp.Count; i++)
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Show",utente));
+                    PushPage(new ShowPage((Ricetta)temp[i], "Show", utente));
                 }
             }
-            
+
         }
 
         public void OpenRicetta(object sender, EventArgs args)
         {
-            String id=((ImageButton)sender).CommandParameter.ToString();
+            String id = ((ImageButton)sender).CommandParameter.ToString();
             for (int i = 0; i < Ricette.Count; i++)
             {
                 if (Ricette[i].Id.Equals(id))
@@ -142,22 +164,42 @@ namespace KnifeAndSpoon
 
         public void SettingsRedirect(object sender, EventArgs args)
         {
-            if (utente.isAdmin)
+            if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
-                PushPage(new SettingsPage("Admin",utente));
+                SettingsPage page = new SettingsPage("Normal", utente);
+                PushPage(page);
             }
             else
             {
-                PushPage(new SettingsPage("Normal",utente));
+                if (utente.isAdmin)
+                {
+                    SettingsPage page = new SettingsPage("Admin", utente);
+                    page.enableBackReturn(new Command(() => {
+                        LoadUtente();
+                    }));
+                    PushPage(page);
+                }
+                else
+                {
+                    SettingsPage page = new SettingsPage("Normal", utente);
+                    page.enableBackReturn(new Command(() => {
+                        LoadUtente();
+                    }));
+                    PushPage(page);
+                }
             }
-            
         }
 
         public void openFavorite(object sender, EventArgs args)
         {
-            Console.WriteLine(TheCarousel.Position.ToString());
-            Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
-            PushPage(new FavouritePage(utente));
+            if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Questa funziona è disponibile solo per chi è registrato"));
+            }
+            else
+            {
+                PushPage(new FavouritePage(utente));
+            }
         }
 
         public void SearchRedirect(object sender, EventArgs args)
@@ -167,7 +209,14 @@ namespace KnifeAndSpoon
 
         public void AddRedirect(object sender, EventArgs args)
         {
-            PushPage(new InsertPage(utente));
+            if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
+            {
+                Navigation.PushModalAsync(new ErrorDialog("Questa funziona è disponibile solo per chi è registrato"));
+            }
+            else
+            {
+                PushPage(new InsertPage(utente));
+            }
         }
 
         public async void PushPage(ContentPage page)
@@ -197,7 +246,7 @@ namespace KnifeAndSpoon
                 checkAntipasto.IsVisible = true;
                 LoadRicetteFilter("Antipasto");
             }
-            
+
         }
 
         public void FilterByPrimo(object sender, EventArgs args)
@@ -243,7 +292,7 @@ namespace KnifeAndSpoon
                 checkContorno.IsVisible = true;
                 LoadRicetteFilter("Contorno");
             }
-            
+
         }
 
         public void FilterByDolce(object sender, EventArgs args)
@@ -267,7 +316,7 @@ namespace KnifeAndSpoon
                Instance.
                GetCollection("Ricette").
                WhereEqualsTo("isApproved", true).
-               WhereEqualsTo("Categoria",category).
+               WhereEqualsTo("Categoria", category).
                GetDocumentsAsync();
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
             Ricette = new ObservableCollection<Ricetta>(ricette);
@@ -292,7 +341,7 @@ namespace KnifeAndSpoon
             var group = await CrossCloudFirestore.Current.
                Instance.
                GetCollection("Ricette").
-               WhereEqualsTo("isApproved",true).
+               WhereEqualsTo("isApproved", true).
                GetDocumentsAsync();
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
             Ricette = new ObservableCollection<Ricetta>(ricette);
@@ -305,7 +354,7 @@ namespace KnifeAndSpoon
                Instance.
                GetCollection("Ricette").
                WhereEqualsTo("isApproved", true).
-               OrderBy("Timestamp",true).
+               OrderBy("Timestamp", true).
                LimitTo(10).
                GetDocumentsAsync();
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
@@ -320,6 +369,18 @@ namespace KnifeAndSpoon
             userName.Text = list[0].Nome;
             ImgUtente.Source = list[0].Immagine;
             this.utente = list[0];
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            var time = System.DateTime.Now;
+            //Are you sure?
+            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro di voler uscire?", new Command(async () =>
+            {
+                await Navigation.PopModalAsync();
+                await Navigation.PopAsync();
+            })));
+            return true;
         }
     }
 }

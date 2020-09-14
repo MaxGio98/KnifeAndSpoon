@@ -22,7 +22,7 @@ namespace KnifeAndSpoon
     {
         private int count_ingredienti = 0;
         private int count_passaggi = 0;
-        private MediaFile imgFile=null;
+        private MediaFile imgFile = null;
         private Utente utente;
         public InsertPage(Utente usr)
         {
@@ -139,7 +139,7 @@ namespace KnifeAndSpoon
             del_button.HorizontalOptions = LayoutOptions.End;
             del_button.BackgroundColor = Color.FromHex("#b10000");
             del_button.CornerRadius = 50;
-            del_button.Margin = new Thickness(10,0,5,0);
+            del_button.Margin = new Thickness(10, 0, 5, 0);
             del_button.TextColor = Color.White;
             del_button.ImageSource = "remove";
             stack.Children.Add(del_button);
@@ -171,69 +171,74 @@ namespace KnifeAndSpoon
 
         private async void checkPermissions(object sender, EventArgs e)
         {
-            if(await GetPermissions())
+            if (await GetPermissions())
             {
-
-                string action = await DisplayActionSheet("Inserisci foto da...", "Annulla", null, "Fotocamera", "Galleria");
-                if (action != null)
-                {
-                    if (action.Equals("Fotocamera"))
-                    {
-                        await CrossMedia.Current.Initialize();
-                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                        {
-                            DisplayAlert("No Camera", ":( No camera available.", "OK");
-                            return;
-                        }
-                        var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                        {
-                            AllowCropping = true,
-                            CompressionQuality = 1,
-                            Directory = "Ricette",
-                            Name = "test.jpg"
-                        });
-                        if (file == null)
-                            return;
-                        imgFile = file;
-                        imgToUpload.Source = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            return stream;
-                        });
-                    }
-                    else if (action.Equals("Galleria"))
-                    {
-                        if (!CrossMedia.Current.IsPickPhotoSupported)
-                        {
-                            DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
-                            return;
-                        }
-                        var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
-                        {
-                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                            CompressionQuality = 1
-                        });
-
-
-                        if (file == null)
-                            return;
-
-                        imgFile = file;
-                        imgToUpload.Source = ImageSource.FromStream(() =>
-                        {
-                            var stream = file.GetStream();
-                            return stream;
-                        });
-
-                    }
-                }
+                await Navigation.PushModalAsync(new ImageSelectionDialog(
+                    "Inserisci foto da ...",
+                    new Command(() => { getPhotoFromCamera(); }),
+                    new Command(() => { getPhotoFromGalleryAsync(); })
+                    )
+                    );
             }
             else
             {
-                await DisplayAlert("Non ho le autorizzazioni necessarie", "Per favore approva tutto", "OK");
+                await Navigation.PushModalAsync(new ErrorDialog("Non ho le autorizzazioni necessarie"));
             }
         }
 
+        public async void getPhotoFromCamera()
+        {
+            await CrossMedia.Current.Initialize();
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Nessuna fotocamera disponibile"));
+                return;
+            }
+            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                AllowCropping = true,
+                CompressionQuality = 1,
+                Directory = "Ricette",
+                Name = "test.jpg"
+            });
+            if (file == null)
+                return;
+            imgFile = file;
+            Navigation.PopModalAsync();
+            imgToUpload.Source = ImageSource.FromStream(() =>
+            {
+                var stream = file.GetStream();
+                return stream;
+            });
+
+        }
+
+        public async void getPhotoFromGalleryAsync()
+        {
+            if (!CrossMedia.Current.IsPickPhotoSupported)
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Acesso alle foto non consentito"));
+                return;
+            }
+            var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
+            {
+                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                CompressionQuality = 1
+            });
+
+
+            if (file == null)
+                return;
+
+            imgFile = file;
+            Navigation.PopModalAsync();
+            imgToUpload.Source = ImageSource.FromStream(() =>
+            {
+                var stream = file.GetStream();
+                return stream;
+            });
+
+        }
 
         public static async Task<bool> GetPermissions()
         {
@@ -302,12 +307,12 @@ namespace KnifeAndSpoon
 
         public async void upload()
         {
-            
+
             //Inizializzazione Ricetta
             Timestamp t = new Timestamp(DateTime.Now);
             Ricetta ricetta = new Ricetta();
             //Controlli sui campi
-            if (Name.Text!=null)
+            if (Name.Text != null)
             {
                 if (!Name.Text.Trim().Equals(""))
                 {
@@ -318,14 +323,14 @@ namespace KnifeAndSpoon
                     Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
                     return;
                 }
-                
+
             }
             else
             {
                 Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
                 return;
             }
-            
+
             ricetta.Autore = utente.Id;
 
             ricetta.Timestamp = t;
@@ -334,18 +339,18 @@ namespace KnifeAndSpoon
 
             if (Time.Text != null)
             {
-                if(!Time.Text.Trim().Equals(""))
+                if (!Time.Text.Trim().Equals(""))
                 {
                     ricetta.TempoPreparazione = Time.Text.ToString();
                 }
-                
+
             }
             else
             {
                 Navigation.PushModalAsync(new ErrorDialog("Controlla il tempo di preparazione"));
                 return;
             }
-            
+
             if (Servings.Text != null)
             {
                 if (!Servings.Text.Trim().Equals(""))
@@ -357,7 +362,7 @@ namespace KnifeAndSpoon
                     Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
                     return;
                 }
-                
+
             }
             else
             {
@@ -366,7 +371,7 @@ namespace KnifeAndSpoon
             }
 
 
- 
+
             ricetta.isApproved = false;
 
             List<IDictionary<string, object>> ingredienti = new List<IDictionary<string, object>>();
@@ -414,14 +419,14 @@ namespace KnifeAndSpoon
                                     Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " non può essere 0"));
                                     return;
                                 }
-                                
+
                             }
                             else
                             {
                                 Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
                                 return;
                             }
-                            
+
                         }
                         else
                         {
@@ -445,7 +450,7 @@ namespace KnifeAndSpoon
             }
 
             List<string> passaggi = new List<string>();
-            if(lst_passaggi.Children.Count!=0)
+            if (lst_passaggi.Children.Count != 0)
             {
                 for (int i = 0; i < lst_passaggi.Children.Count; i++)
                 {
@@ -475,12 +480,13 @@ namespace KnifeAndSpoon
                 Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un passaggio"));
                 return;
             }
-           
+
             ricetta.Passaggi = passaggi;
             ricetta.Ingredienti = ingredienti;
 
             Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?", new Command(
-                async() => {
+                async () =>
+                {
                     await Navigation.PopModalAsync();
                     //Upload Immagine
                     loadOverlay.IsVisible = true;
@@ -497,6 +503,25 @@ namespace KnifeAndSpoon
                     await Navigation.PushModalAsync(new ErrorDialog("La tua ricetta è in fase di approvazione"));
                     await Navigation.PopAsync();
                 })));
+        }
+
+        public void Back(object sender, EventArgs args)
+        {
+            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro di voler uscire?", new Command(async () =>
+            {
+                await Navigation.PopModalAsync();
+                await Navigation.PopAsync();
+            })));
+        }
+        protected override bool OnBackButtonPressed()
+        {
+            //Are you sure?
+            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro di voler uscire?", new Command(async () =>
+             {
+                 await Navigation.PopModalAsync();
+                 await Navigation.PopAsync();
+             })));
+            return true;
         }
     }
 }

@@ -19,8 +19,9 @@ namespace KnifeAndSpoon
         Utente Autore;
         String Mode;
         private Ricetta r;
-        private Boolean isFav=false;
+        private Boolean isFav = false;
         private Utente utente;
+        private Command backReturn;
         public ShowPage(Ricetta ricetta, String Mode, Utente usr)
         {
             this.Mode = Mode;
@@ -31,7 +32,10 @@ namespace KnifeAndSpoon
             if (Mode.Equals("Show"))
             {
                 multiFab.ImageSource = "favourite";
-                setPreferiti();
+                if (!CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
+                {
+                    setPreferiti();
+                }
             }
             else if (Mode.Equals("Admin"))
             {
@@ -42,7 +46,7 @@ namespace KnifeAndSpoon
             Thumbnail.Source = ricetta.Thumbnail;
             Titolo.Text = ricetta.Titolo;
             Tempo.Text = ricetta.TempoPreparazione + " minuti";
-            if ( int.Parse(ricetta.NumeroPersone) > 1)
+            if (int.Parse(ricetta.NumeroPersone) > 1)
             {
                 Porzioni.Text = ricetta.NumeroPersone + " persone";
             }
@@ -64,23 +68,27 @@ namespace KnifeAndSpoon
                 }
                 else
                 {
-                    ingredienti.Add(new Ingrediente(ricetta.Ingredienti[i]["Nome"].ToString(), "" , correctform));
+                    ingredienti.Add(new Ingrediente(ricetta.Ingredienti[i]["Nome"].ToString(), "", correctform));
                 }
-                
+
             }
             ObservableCollection<Ingrediente> Ingredienti = new ObservableCollection<Ingrediente>(ingredienti);
-            BindableLayout.SetItemsSource(lst_ingredienti,Ingredienti);
+            BindableLayout.SetItemsSource(lst_ingredienti, Ingredienti);
 
             //Analisi passaggi
             List<Passaggio> passaggi = new List<Passaggio>();
-            for(int i = 0; i < ricetta.Passaggi.Count; i++)
+            for (int i = 0; i < ricetta.Passaggi.Count; i++)
             {
-                passaggi.Add(new Passaggio(i+1, ricetta.Passaggi[i]));
+                passaggi.Add(new Passaggio(i + 1, ricetta.Passaggi[i]));
             }
             ObservableCollection<Passaggio> Passaggi = new ObservableCollection<Passaggio>(passaggi);
             BindableLayout.SetItemsSource(lst_passaggi, Passaggi);
             LoadUtente(ricetta.Autore);
-            
+        }
+
+        public void enableBackReturn(Command command)
+        {
+            backReturn = command;
         }
 
         public void showCategoria(String categoria)
@@ -103,15 +111,15 @@ namespace KnifeAndSpoon
                 case "Dolce":
                     ImgCategoria.Source = "dolce";
                     break;
-                default:break;
+                default: break;
             }
         }
 
         public async Task LoadUtente(String id)
         {
-            
+
             var result = await CrossCloudFirestore.Current.Instance.GetDocument("Utenti/" + id).GetDocumentAsync();
-            
+
             Console.WriteLine(result.Data["Nome"].ToString());
             Console.WriteLine(result.Data["Immagine"].ToString());
             ImgAutore.Source = result.Data["Immagine"].ToString();
@@ -174,12 +182,12 @@ namespace KnifeAndSpoon
         {
             for (int i = 0; i < utente.Preferiti.Count; i++)
             {
-                if(utente.Preferiti[i].Equals(r.Id))
+                if (utente.Preferiti[i].Equals(r.Id))
                 {
                     isFav = true;
                 }
             }
-            if(isFav)
+            if (isFav)
             {
                 multiFab.ImageSource = "favourite_full";
             }
@@ -193,26 +201,99 @@ namespace KnifeAndSpoon
         {
             if (Mode.Equals("Show"))
             {
-                if (isFav)
+                if (!CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
                 {
-                    isFav = false;
-                    utente.Preferiti.Remove(r.Id);
-                    await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
-                    multiFab.ImageSource = "favourite";
+                    if (isFav)
+                    {
+                        isFav = false;
+                        utente.Preferiti.Remove(r.Id);
+                        await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
+                        multiFab.ImageSource = "favourite";
+                    }
+                    else
+                    {
+                        isFav = true;
+                        utente.Preferiti.Add(r.Id);
+                        await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
+                        multiFab.ImageSource = "favourite_full";
+                    }
                 }
                 else
                 {
-                    isFav = true;
-                    utente.Preferiti.Add(r.Id);
-                    await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
-                    multiFab.ImageSource = "favourite_full";
+                    Navigation.PushModalAsync(new ErrorDialog("Questa funziona è disponibile solo per chi è registrato"));
                 }
+                
             }
             else
             {
-                //TODO
+                Navigation.PushModalAsync(new ApproveDialog("Cosa vuoi fare?",
+                    new Command(() =>
+                    {
+                        approveRicetta();
+                    }),
+                    new Command(() =>
+                    {
+                        removeRicetta();
+                    })));
             }
-            
+        }
+
+        public void approveRicetta()
+        {
+            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?",
+                    new Command(async () =>
+                    {
+                        await Navigation.PopModalAsync();
+                        await Navigation.PopModalAsync();
+                        //Modifica Firebase
+                        await CrossCloudFirestore.Current
+                         .Instance
+                         .GetCollection("Ricette")
+                         .GetDocument(r.Id)
+                         .UpdateDataAsync(new { isApproved = true });
+                        await Navigation.PopAsync();
+                        //Aggiorna lista
+                        backReturn.Execute(backReturn);
+                    })
+                    ));
+        }
+
+        public void removeRicetta()
+        {
+            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?",
+                    new Command(async () =>
+                    {
+                        await Navigation.PopModalAsync();
+                        await Navigation.PopModalAsync();
+                        //Rimuove da Firebase
+                        await CrossCloudFirestore.Current
+                         .Instance
+                         .GetCollection("Ricette")
+                         .GetDocument(r.Id)
+                         .DeleteDocumentAsync();
+                        await Navigation.PopAsync();
+                        //Aggiorna lista
+                        backReturn.Execute(backReturn);
+                    })
+                    ));
+        }
+
+        public void Back(object sender, EventArgs args)
+        {
+            Navigation.PopAsync();
+            if (backReturn != null)
+            {
+                backReturn.Execute(backReturn);
+            }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if (backReturn != null)
+            {
+                backReturn.Execute(backReturn);
+            }
+            return false;
         }
 
     }

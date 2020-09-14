@@ -12,8 +12,20 @@
     <Grid>
         <ScrollView>
             <StackLayout Spacing="-140">
-                <Image Source="antipastomain" HeightRequest="300" Aspect="AspectFill" x:Name="imgToUpload">
-                </Image>
+                <Grid>
+                    <Image Source="antipastomain" HeightRequest="300" Aspect="AspectFill" x:Name="imgToUpload">
+                    </Image>
+                    <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
+                        <magic:GradientView.GradientSource>
+                            <magic:LinearGradient Angle="0">
+                                <magic:GradientStop Color="#00000000" Offset="0.6" />
+                                <magic:GradientStop Color="#aa000000" Offset="1" />
+                            </magic:LinearGradient>
+                        </magic:GradientView.GradientSource>
+                    </magic:GradientView>
+                    <Button x:Name="backFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="10" HorizontalOptions="Start" VerticalOptions="Start" TextColor="White" Image="back" Clicked="Back"/>
+
+                </Grid>
                 <StackLayout>
                     <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera" Clicked="checkPermissions"/>
 

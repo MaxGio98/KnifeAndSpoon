@@ -16,7 +16,6 @@ namespace KnifeAndSpoon
     public partial class FavouritePage : ContentPage
     {
         Utente utente;
-        List<String> oldFav;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
 
         public FavouritePage(Utente usr)
@@ -54,14 +53,17 @@ namespace KnifeAndSpoon
 
         public void OpenRicettaById(object sender, EventArgs args)
         {
-            oldFav = utente.Preferiti;
             String value = ((Button)sender).CommandParameter.ToString();
             System.Collections.ObjectModel.ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(FavouriteList);
             for (int i = 0; i < temp.Count; i++)
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Show", utente));
+                    ShowPage page = new ShowPage((Ricetta)temp[i], "Show", utente);
+                    page.enableBackReturn(new Command(()=> {
+                        loadFavRicette();
+                    }));
+                    PushPage(page);
                 }
             }
 
@@ -71,9 +73,5 @@ namespace KnifeAndSpoon
             await Navigation.PushAsync(page);
         }
 
-        protected virtual void OnResume()
-        {
-            loadFavRicette();
-        }
     }
 }

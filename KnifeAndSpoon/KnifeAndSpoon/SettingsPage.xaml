@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
              mc:Ignorable="d"
              BackgroundColor="White"
              NavigationPage.HasNavigationBar="False"
@@ -14,10 +15,21 @@
             <StackLayout VerticalOptions="Center">
                 <controls:CircleImage x:Name="ImgUtente" Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="200" WidthRequest="200">
                 </controls:CircleImage>
-                <Button Text="Cambia immagine profilo" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White"></Button>
+                <Button x:Name="propic" Text="Cambia immagine profilo" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White" Clicked="UpdatePhoto"></Button>
                 <Button x:Name="approve" IsVisible="False" IsEnabled="False" Text="Approva le ricette" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,5" TextColor="White" Clicked="Approve"></Button>
             </StackLayout>
-            <Button VerticalOptions="End" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,10" TextColor="White" Text="Effettua Log-Out" Clicked="LogOut"></Button>
+            <Button x:Name="logbutton" VerticalOptions="End" CornerRadius="25" BackgroundColor="#b10000" Margin="20,0,20,10" TextColor="White" Text="Effettua Log-Out" Clicked="LogOut"></Button>
+            <Grid x:Name="loadOverlay" IsVisible="false">
+                <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <magic:GradientView.GradientSource>
+                        <magic:LinearGradient Angle="0">
+                            <magic:GradientStop Color="#55000000" Offset="0" />
+                            <magic:GradientStop Color="#55000000" Offset="1" />
+                        </magic:LinearGradient>
+                    </magic:GradientView.GradientSource>
+                </magic:GradientView>
+                <ActivityIndicator Color="White" IsRunning="true" Scale="0.2" WidthRequest="50" HeightRequest="50"></ActivityIndicator>
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

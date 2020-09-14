@@ -30,19 +30,34 @@ namespace KnifeAndSpoon
         {
             if (CrossFirebaseAuth.Current.Instance.CurrentUser != null)
             {
-                loadOverlay.IsVisible = true;
-                var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
-                if (glob.Count == 0)
+                Console.WriteLine("Ci sta");
+                if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
                 {
-                    //Apertura pagina registrazione
-                    PushPage(new RegisterPage());
+                    Device.BeginInvokeOnMainThread(()=>
+                    {
+                        App.Current.MainPage = new NavigationPage(new HomePage());
+                    });
+                    
                 }
                 else
                 {
-                    //Apertura pagina principale
-                    App.Current.MainPage = new NavigationPage(new HomePage());
+                    loadOverlay.IsVisible = true;
+                    var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
+                    if (glob.Count == 0)
+                    {
+                        //Apertura pagina registrazione
+                        PushPage(new RegisterPage());
+                    }
+                    else
+                    {
+                        //Apertura pagina principale
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            App.Current.MainPage = new NavigationPage(new HomePage());
+                        });
+                    }
+                    loadOverlay.IsVisible = false;
                 }
-                loadOverlay.IsVisible = false;
             }
 
         }
@@ -55,7 +70,15 @@ namespace KnifeAndSpoon
 
         public void loginAnonymous(object sender,EventArgs args)
         {
-            //login anonimo
+            LoginAnonimousAsync();
+        }
+
+        public async void LoginAnonimousAsync()
+        {
+            loadOverlay.IsVisible = true;
+            await CrossFirebaseAuth.Current.Instance.SignInAnonymouslyAsync();
+            loadOverlay.IsVisible = false;
+            App.Current.MainPage = new NavigationPage(new HomePage());
         }
 
         public async void LoginAsync()
@@ -68,27 +91,27 @@ namespace KnifeAndSpoon
             }
             catch (GoogleClientSignInNetworkErrorException e)
             {
-                await App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Navigation.PushModalAsync(new ErrorDialog(e.Message));
             }
             catch (GoogleClientSignInCanceledErrorException e)
             {
-                await App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Navigation.PushModalAsync(new ErrorDialog(e.Message));
             }
             catch (GoogleClientSignInInvalidAccountErrorException e)
             {
-                await App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Navigation.PushModalAsync(new ErrorDialog(e.Message));
             }
             catch (GoogleClientSignInInternalErrorException e)
             {
-                await App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Navigation.PushModalAsync(new ErrorDialog(e.Message));
             }
             catch (GoogleClientNotInitializedErrorException e)
             {
-                await App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Navigation.PushModalAsync(new ErrorDialog(e.Message));
             }
             catch (GoogleClientBaseException e)
             {
-                await App.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Navigation.PushModalAsync(new ErrorDialog(e.Message));
             }
 
         }
@@ -104,7 +127,7 @@ namespace KnifeAndSpoon
             }
             else
             {
-                App.Current.MainPage.DisplayAlert("Error", loginEventArgs.Message, "OK");
+                Navigation.PushModalAsync(new ErrorDialog(loginEventArgs.Message));
             }
 
             _googleClientManager.OnLogin -= OnLoginCompleted;
