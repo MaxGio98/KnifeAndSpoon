@@ -6,7 +6,7 @@ using Plugin.CloudFirestore.Attributes;
 
 namespace KnifeAndSpoon.Model
 {
-    class Utente
+    public class Utente
     {
         [Id]
         public string Id { get; set; }

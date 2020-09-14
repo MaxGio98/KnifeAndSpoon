@@ -15,9 +15,11 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SearchPage : ContentPage
     {
-        public SearchPage()
+        List<Utente> list;
+        public SearchPage(List<Utente> list)
         {
             InitializeComponent();
+            this.list = list;
         }
 
         public void Search(object sender, EventArgs args)
@@ -64,7 +66,7 @@ namespace KnifeAndSpoon
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Show"));
+                    PushPage(new ShowPage((Ricetta)temp[i], "Show",list));
                 }
             }
 

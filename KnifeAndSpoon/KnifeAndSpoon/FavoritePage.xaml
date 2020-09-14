@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
+             BackgroundColor="White"
+             mc:Ignorable="d"
+             x:Class="KnifeAndSpoon.FavoritePage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+
+        <ScrollView Orientation="Vertical">
+            <StackLayout>
+                <Frame Margin="10" Padding="0" CornerRadius="10" HeightRequest="200"  AbsoluteLayout.LayoutFlags="All">
+                    <Grid>
+                        <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Ricette}" IndicatorView="indicatorView">
+                            <CarouselView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <ImageButton Source="{Binding Thumbnail}" Aspect="AspectFill" Clicked="OpenRicetta"></ImageButton>
+
+                                        <magic:GradientView HeightRequest="200" VerticalOptions="FillAndExpand">
+                                            <magic:GradientView.GradientSource>
+                                                <magic:LinearGradient Angle="0">
+                                                    <magic:GradientStop Color="#00000000" Offset="0.6" />
+                                                    <magic:GradientStop Color="#aa000000" Offset="1" />
+                                                </magic:LinearGradient>
+                                            </magic:GradientView.GradientSource>
+                                        </magic:GradientView>
+
+                                        <Label Text="{Binding Titolo}" HorizontalTextAlignment="Center" FontSize="Title" TextColor="White" Padding="15,0,0,20" HorizontalOptions="Start" VerticalOptions="End"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+                        </CarouselView>
+                        <IndicatorView x:Name="indicatorView"
+                               IndicatorColor="Gray"
+                               SelectedIndicatorColor="White"
+                               HorizontalOptions="Center"
+                               VerticalOptions="End"
+                               Padding="10"/>
+                    </Grid>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+        
+        
+    </ContentPage.Content>
+</ContentPage>

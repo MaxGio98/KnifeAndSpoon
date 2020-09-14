@@ -24,7 +24,8 @@ namespace KnifeAndSpoon
         private int count_ingredienti = 0;
         private int count_passaggi = 0;
         private MediaFile imgFile=null;
-        public InsertPage()
+        private List<Utente> list;
+        public InsertPage(List<Utente> list)
         {
             InitializeComponent();
             this.Category.Items.Add("Antipasto");
@@ -34,6 +35,7 @@ namespace KnifeAndSpoon
             this.Category.Items.Add("Dolce");
             this.Category.SelectedIndex = 0;
             this.Title = "Nuova ricetta";
+            this.list = list;
             Servings.TextChanged += OnTextChanged;
             Time.TextChanged += OnTextChanged;
         }
@@ -291,8 +293,6 @@ namespace KnifeAndSpoon
                 var progress = e.TotalByteCount > 0 ? 100.0 * e.BytesTransferred / e.TotalByteCount : 0;
             };
             await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
-            var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
-            List<Utente> list = glob.ToObjects<Utente>().ToList();
             //Console.WriteLine(await reference.GetDownloadUrlAsync());
             List<string> passaggi = new List<string>();
             for (int i = 0; i < lst_passaggi.Children.Count; i++)

@@ -15,9 +15,11 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ApprovePage : ContentPage
     {
-        public ApprovePage()
+        List<Utente> list;
+        public ApprovePage(List<Utente> list)
         {
             InitializeComponent();
+            this.list = list;
             LoadAsync(); 
         }
 
@@ -47,7 +49,7 @@ namespace KnifeAndSpoon
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Admin"));
+                    PushPage(new ShowPage((Ricetta)temp[i], "Admin",list));
                 }
             }
 

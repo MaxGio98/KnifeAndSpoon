@@ -24,6 +24,7 @@ namespace KnifeAndSpoon
         readonly Task autoCloseFabs;
         private bool isRefreshing;
         private Utente utente;
+        List<Utente> list;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
         public HomePage()
         {
@@ -121,7 +122,7 @@ namespace KnifeAndSpoon
             {
                 if (temp[i].Id.Equals(value))
                 {
-                    PushPage(new ShowPage((Ricetta)temp[i], "Show"));
+                    PushPage(new ShowPage((Ricetta)temp[i], "Show",list));
                 }
             }
             
@@ -131,31 +132,37 @@ namespace KnifeAndSpoon
         {
             Console.WriteLine(TheCarousel.Position.ToString());
             Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
-            PushPage(new ShowPage(Ricette[TheCarousel.Position],"Show"));
+            PushPage(new ShowPage(Ricette[TheCarousel.Position],"Show",list));
         }
 
         public void SettingsRedirect(object sender, EventArgs args)
         {
             if (utente.isAdmin)
             {
-                PushPage(new SettingsPage("Admin"));
+                PushPage(new SettingsPage("Admin",list));
             }
             else
             {
-                PushPage(new SettingsPage("Normal"));
+                PushPage(new SettingsPage("Normal",list));
             }
             
         }
 
+        public void openFavorite(object sender, EventArgs args)
+        {
+            Console.WriteLine(TheCarousel.Position.ToString());
+            Console.WriteLine(Ricette[TheCarousel.Position].Titolo);
+            PushPage(new FavoritePage(list ));
+        }
 
         public void SearchRedirect(object sender, EventArgs args)
         {
-            PushPage(new SearchPage());
+            PushPage(new SearchPage(list));
         }
 
         public void AddRedirect(object sender, EventArgs args)
         {
-            PushPage(new InsertPage());
+            PushPage(new InsertPage(list));
         }
 
         public async void PushPage(ContentPage page)
@@ -304,7 +311,7 @@ namespace KnifeAndSpoon
         public async Task LoadUtente()
         {
             var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
-            List<Utente> list = glob.ToObjects<Utente>().ToList();
+            list = glob.ToObjects<Utente>().ToList();
             userName.Text = list[0].Nome;
             ImgUtente.Source = list[0].Immagine;
             this.utente = list[0];

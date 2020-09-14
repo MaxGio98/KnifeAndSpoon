@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KnifeAndSpoon.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,11 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
     {
-        public SettingsPage(string mode)
+        List<Utente> list;
+        public SettingsPage(string mode, List<Utente> list)
         {
             InitializeComponent();
+            this.list = list;
             if (mode == "Admin")
             {
                 approve.IsEnabled = true;
@@ -29,7 +32,7 @@ namespace KnifeAndSpoon
 
         public void Approve(object sender, EventArgs args)
         {
-            PushPage(new ApprovePage());
+            PushPage(new ApprovePage(list));
         }
 
         public async void PushPage(ContentPage page)

@@ -21,12 +21,12 @@ namespace KnifeAndSpoon
         private Ricetta r;
         private Boolean isFav=false;
         private List<Utente> list;
-        public ShowPage(Ricetta ricetta,String Mode)
+        public ShowPage(Ricetta ricetta, String Mode, List<Utente> list)
         {
             this.Mode = Mode;
             InitializeComponent();
             r = ricetta;
-
+            this.list = list;
             //Apply show mode
             if (Mode == "Show")
             {
