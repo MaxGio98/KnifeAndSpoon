@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.digiolaba.knifeandspoon" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
-	<application android:label="KnifeAndSpoon.Android" android:icon="@drawable/app_logo">
+	<application android:label="KnifeAndSpoon" android:icon="@mipmap/ic_launcher">
     <provider android:name="android.support.v4.content.FileProvider"
               android:authorities="${applicationId}.fileprovider"
               android:exported="false"

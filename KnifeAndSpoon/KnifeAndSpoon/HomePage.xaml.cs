@@ -62,13 +62,15 @@ namespace KnifeAndSpoon
                 isFabsOpen = !isFabsOpen;
                 try
                 {
-                    if (cts != null)
+                    if (cts!=null)
                     {
-                        cts = new CancellationTokenSource();
+                        cts.Cancel();
+                        cts = null;
                     }
+                    cts = new CancellationTokenSource();
                     Task.Run(async () =>
                     {
-                        await Task.Delay(5000);
+                        await Task.Delay(5000,cts.Token);
                         Device.BeginInvokeOnMainThread(() =>
                         {
                             isFabsOpen = !isFabsOpen;
@@ -84,15 +86,10 @@ namespace KnifeAndSpoon
                         });
                     },cts.Token);
                 }
-                // *** If cancellation is requested, an OperationCanceledException results.
                 catch (OperationCanceledException e)
-                {
-                    Console.WriteLine("Cancel ex {0}", e.Message);
-                }
+                {}
                 catch (Exception e)
-                {
-                    Console.WriteLine("ex {0}", e.Message);
-                }
+                {}
 
                 mainFab.RotateTo(45, 150);
                 settingsFab.TranslateTo(-210, 0, 150);
@@ -106,7 +103,11 @@ namespace KnifeAndSpoon
             }
             else
             {
-                cts.Cancel();
+                if (cts == null)
+                {
+                    cts.Cancel();
+                    cts = null;
+                }
                 //Nascondi i pulsanti
                 isFabsOpen = !isFabsOpen;
                 mainFab.RotateTo(-45, 150);
