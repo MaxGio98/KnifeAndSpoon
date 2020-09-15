@@ -48,24 +48,20 @@ namespace KnifeAndSpoon
             LoadRicette();
             LoadLastTen();
             TheCarousel.Position = 0;
-            checkConnection();
+            //checkConnection();
         }
 
         private async void checkConnection()
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
-                await DisplayAlert("aeeee","ehhh","ok");
+                await DisplayAlert("aeeee","ehhh",null);
             }
             CrossConnectivity.Current.ConnectivityChanged += async (sender, agrs) =>
             {
                 if (!CrossConnectivity.Current.IsConnected)
                 {
-                    var boh= DisplayAlert("aeeee", "ehhh", "oooh");
-                    if(boh.IsCanceled)
-                    {
-                        checkConnection();
-                    }
+                    await DisplayAlert("aeeee", "ehhh", "oooh");
                 }
                 else
                 {
