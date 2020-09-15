@@ -1,5 +1,6 @@
 ﻿using KnifeAndSpoon.Model;
 using Plugin.CloudFirestore;
+using Plugin.Connectivity;
 using Plugin.FirebaseAuth;
 using Plugin.GoogleClient;
 using Plugin.GoogleClient.Shared;
@@ -24,6 +25,7 @@ namespace KnifeAndSpoon
             _googleClientManager = CrossGoogleClient.Current;
             InitializeComponent();
             CheckUser();
+            
         }
 
         public async void CheckUser()

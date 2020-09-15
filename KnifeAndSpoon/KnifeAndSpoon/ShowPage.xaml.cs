@@ -36,6 +36,10 @@ namespace KnifeAndSpoon
                 {
                     setPreferiti();
                 }
+                else
+                {
+                    multiFab.BackgroundColor = Color.FromHex("#aa00000");
+                }
             }
             else if (Mode.Equals("Admin"))
             {
@@ -226,6 +230,7 @@ namespace KnifeAndSpoon
             }
             else
             {
+                multiFab.IsEnabled = false;
                 Navigation.PushModalAsync(new ApproveDialog("Cosa vuoi fare?",
                     new Command(() =>
                     {

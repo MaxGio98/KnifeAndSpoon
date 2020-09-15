@@ -1,5 +1,6 @@
 ﻿using KnifeAndSpoon.Model;
 using Plugin.CloudFirestore;
+using Plugin.Connectivity;
 using Plugin.FirebaseAuth;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace KnifeAndSpoon
             InitializeComponent();
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
+                favouriteFab.BackgroundColor = Color.FromHex("#aa00000");
+                addFab.BackgroundColor = Color.FromHex("#aa00000");
             }
             ICommand refreshCommand = new Command(async () =>
             {
@@ -45,6 +48,35 @@ namespace KnifeAndSpoon
             LoadRicette();
             LoadLastTen();
             TheCarousel.Position = 0;
+            checkConnection();
+        }
+
+        private async void checkConnection()
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                await DisplayAlert("aeeee","ehhh","ok");
+            }
+            CrossConnectivity.Current.ConnectivityChanged += async (sender, agrs) =>
+            {
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    var boh= DisplayAlert("aeeee", "ehhh", "oooh");
+                    if(boh.IsCanceled)
+                    {
+                        checkConnection();
+                    }
+                }
+                else
+                {
+                    Navigation.PopModalAsync();
+                }
+            };
+        }
+
+        private void DisplayAlert(string v)
+        {
+            throw new NotImplementedException();
         }
 
         private async Task RefreshData()

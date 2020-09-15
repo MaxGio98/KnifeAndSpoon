@@ -1,4 +1,5 @@
 ﻿using Plugin.CloudFirestore;
+using Plugin.Connectivity;
 using Plugin.FirebaseAuth;
 using Plugin.GoogleClient;
 using System;
@@ -15,7 +16,6 @@ namespace KnifeAndSpoon
             //CrossDeviceOrientation.Current.LockOrientation(DeviceOrientations.Landscape);
             InitializeComponent();
             MainPage = new NavigationPage(new MainPage());
-            
         }
 
         protected override void OnStart()
