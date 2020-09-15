@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,14 +12,18 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SearchPage : ContentPage
     {
-        Utente utente;
+        private Utente utente;
         public SearchPage(Utente usr)
         {
             InitializeComponent();
             utente = usr;
+            searchField.Completed += (sender, e) =>
+            {
+                Search(sender, e);
+            };
         }
 
-        public void Search(object sender, EventArgs args)
+        private void Search(object sender, EventArgs args)
         {
             if (searchField.Text != null)
             {
@@ -30,7 +31,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void SearchAsync(string value)
+        private async void SearchAsync(string value)
         {
             Console.WriteLine(value);
             loadOverlay.IsVisible = true;
@@ -61,12 +62,12 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void Back(object sender, EventArgs args)
+        private void Back(object sender, EventArgs args)
         {
             Navigation.PopAsync();
         }
 
-        public void OpenRicettaById(object sender, EventArgs args)
+        private void OpenRicettaById(object sender, EventArgs args)
         {
             String value = ((Button)sender).CommandParameter.ToString();
             System.Collections.ObjectModel.ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(SearchList);
@@ -79,7 +80,7 @@ namespace KnifeAndSpoon
             }
 
         }
-        public async void PushPage(ContentPage page)
+        private async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }

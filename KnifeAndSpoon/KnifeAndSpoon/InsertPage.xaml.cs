@@ -1,6 +1,5 @@
 ﻿using KnifeAndSpoon.Model;
 using Plugin.CloudFirestore;
-using Plugin.FirebaseAuth;
 using Plugin.FirebaseStorage;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
@@ -8,9 +7,6 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -20,8 +16,6 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class InsertPage : ContentPage
     {
-        private int count_ingredienti = 0;
-        private int count_passaggi = 0;
         private MediaFile imgFile = null;
         private Utente utente;
         public InsertPage(Utente usr)
@@ -38,9 +32,8 @@ namespace KnifeAndSpoon
             Servings.TextChanged += OnTextChanged;
             Time.TextChanged += OnTextChanged;
         }
-        public void AddIngrediente(object sender, EventArgs args)
+        private void AddIngrediente(object sender, EventArgs args)
         {
-            count_ingredienti++;
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
             Button del_button = new Button();
@@ -105,14 +98,8 @@ namespace KnifeAndSpoon
             ut.Margin = new Thickness(0, 0, 10, 0);
             stack.Children.Add(ut);
             lst_ingredienti.Children.Add(stack);
-            /*for (int i = 0; i < lst_ingredienti.Children.Count; i++)
-            {
-                Console.WriteLine(((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[1]).Text);
-                Console.WriteLine(((Entry)((StackLayout)lst_ingredienti.Children[i]).Children[2]).Text);
-                Console.WriteLine(((Picker)((StackLayout)lst_ingredienti.Children[i]).Children[3]).SelectedItem.ToString());
-            }*/
         }
-        public void OnTextChanged(object s, EventArgs e)
+        private void OnTextChanged(object s, EventArgs e)
         {
             Entry entry = s as Entry;
             if (entry.Text.Contains("-"))
@@ -125,9 +112,8 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void AddPassaggio(object sender, EventArgs args)
+        private void AddPassaggio(object sender, EventArgs args)
         {
-            count_passaggi++;
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
             Button del_button = new Button();
@@ -150,20 +136,15 @@ namespace KnifeAndSpoon
             passText.HeightRequest = 100;
             stack.Children.Add(passText);
             lst_passaggi.Children.Add(stack);
-            /*
-            for(int i = 0; i < lst_passaggi.Children.Count; i++)
-            {
-                Console.WriteLine(((Editor)((StackLayout)lst_passaggi.Children[i]).Children[1]).Text);
-            }*/
         }
 
-        public void RemoveIngrediente(object sender, EventArgs args)
+        private void RemoveIngrediente(object sender, EventArgs args)
         {
             Button temp = (Button)sender;
             lst_ingredienti.Children.Remove((StackLayout)temp.CommandParameter);
         }
 
-        public void RemovePassaggio(object sender, EventArgs args)
+        private void RemovePassaggio(object sender, EventArgs args)
         {
             Button temp = (Button)sender;
             lst_passaggi.Children.Remove((StackLayout)temp.CommandParameter);
@@ -186,7 +167,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void getPhotoFromCamera()
+        private async void getPhotoFromCamera()
         {
             await CrossMedia.Current.Initialize();
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
@@ -213,7 +194,7 @@ namespace KnifeAndSpoon
 
         }
 
-        public async void getPhotoFromGalleryAsync()
+        private async void getPhotoFromGalleryAsync()
         {
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
@@ -240,7 +221,7 @@ namespace KnifeAndSpoon
 
         }
 
-        public static async Task<bool> GetPermissions()
+        private static async Task<bool> GetPermissions()
         {
             bool permissionsGranted = true;
 
@@ -293,7 +274,7 @@ namespace KnifeAndSpoon
             return permissionsGranted;
         }
 
-        public void publishRecipeToFirebase(object sender, EventArgs e)
+        private void publishRecipeToFirebase(object sender, EventArgs e)
         {
             confirmFab.IsEnabled = false;
             if (imgFile == null)
@@ -307,7 +288,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void upload()
+        private async void upload()
         {
             //Inizializzazione Ricetta
             Timestamp t = new Timestamp(DateTime.Now);
@@ -499,7 +480,7 @@ namespace KnifeAndSpoon
             ricetta.Passaggi = passaggi;
             ricetta.Ingredienti = ingredienti;
 
-            Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?", new Command(
+            await Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?", new Command(
                 async () =>
                 {
                     await Navigation.PopModalAsync();

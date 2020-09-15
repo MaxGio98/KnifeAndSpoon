@@ -27,7 +27,7 @@ namespace KnifeAndSpoon
             custom = customOk;
         }
 
-        public void okButton(object sender, EventArgs args)
+        private void okButton(object sender, EventArgs args)
         {
             Navigation.PopModalAsync();
             if (custom != null)

@@ -21,7 +21,7 @@
                                 <Label Text="Ciao " FontSize="Title" TextColor="Black"/>
                                 <Label x:Name="userName" Text="visitatore" FontSize="Title" TextColor="Black"/>
                             </StackLayout>
-                            <Label Text="Benvenuto su KnifeSpoon" FontSize="Subtitle" TextColor="Black"/>
+                            <Label Text="Benvenuto su Knife&amp;Spoon" FontSize="Subtitle" TextColor="Black"/>
                         </StackLayout>
                     </StackLayout>
                     <ScrollView Orientation="Horizontal">

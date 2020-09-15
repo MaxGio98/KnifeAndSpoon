@@ -5,11 +5,8 @@ using Plugin.FirebaseAuth;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,11 +18,11 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
-        Boolean isFabsOpen;
+        private Boolean isFabsOpen;
         readonly Task autoCloseFabs;
         private bool isRefreshing;
         private Utente utente;
-        CancellationTokenSource cts;
+        private CancellationTokenSource cts;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
         public HomePage()
         {
@@ -46,7 +43,6 @@ namespace KnifeAndSpoon
             LoadRicette();
             LoadLastTen();
             TheCarousel.Position = 0;
-            //checkConnection();
         }
 
         private async void checkConnection()
@@ -80,7 +76,7 @@ namespace KnifeAndSpoon
         }
 
 
-        public void OpenFabs(object sender, EventArgs args)
+        private void OpenFabs(object sender, EventArgs args)
         {
             if (isFabsOpen == false)
             {
@@ -148,7 +144,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        async Task CloseFabsWithWait()
+        private async Task CloseFabsWithWait()
         {
             await Task.Delay(2000);
             isFabsOpen = !isFabsOpen;
@@ -163,7 +159,7 @@ namespace KnifeAndSpoon
             addFab.FadeTo(0, 150);
         }
 
-        public void OpenRicettaById(object sender, EventArgs args)
+        private void OpenRicettaById(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             String value = ((Button)sender).CommandParameter.ToString();
@@ -178,7 +174,7 @@ namespace KnifeAndSpoon
 
         }
 
-        public void OpenRicetta(object sender, EventArgs args)
+        private void OpenRicetta(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             String id = ((ImageButton)sender).CommandParameter.ToString();
@@ -191,7 +187,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void SettingsRedirect(object sender, EventArgs args)
+        private void SettingsRedirect(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
@@ -220,7 +216,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void openFavorite(object sender, EventArgs args)
+        private void openFavorite(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
@@ -239,13 +235,13 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void SearchRedirect(object sender, EventArgs args)
+        private void SearchRedirect(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             PushPage(new SearchPage(utente));
         }
 
-        public void AddRedirect(object sender, EventArgs args)
+        private void AddRedirect(object sender, EventArgs args)
         {
             OpenFabs(this,null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
@@ -264,12 +260,12 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void PushPage(ContentPage page)
+        private async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }
 
-        public void DisableFilter()
+        private void DisableFilter()
         {
             checkAntipasto.IsVisible = false;
             checkPrimo.IsVisible = false;
@@ -278,7 +274,7 @@ namespace KnifeAndSpoon
             checkDolce.IsVisible = false;
         }
 
-        public void FilterByAntipasto(object sender, EventArgs args)
+        private void FilterByAntipasto(object sender, EventArgs args)
         {
             if (checkAntipasto.IsVisible)
             {
@@ -294,7 +290,7 @@ namespace KnifeAndSpoon
 
         }
 
-        public void FilterByPrimo(object sender, EventArgs args)
+        private void FilterByPrimo(object sender, EventArgs args)
         {
             if (checkPrimo.IsVisible)
             {
@@ -309,7 +305,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void FilterBySecondo(object sender, EventArgs args)
+        private void FilterBySecondo(object sender, EventArgs args)
         {
             if (checkSecondo.IsVisible)
             {
@@ -324,7 +320,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void FilterByContorno(object sender, EventArgs args)
+        private void FilterByContorno(object sender, EventArgs args)
         {
             if (checkContorno.IsVisible)
             {
@@ -340,7 +336,7 @@ namespace KnifeAndSpoon
 
         }
 
-        public void FilterByDolce(object sender, EventArgs args)
+        private void FilterByDolce(object sender, EventArgs args)
         {
             if (checkDolce.IsVisible)
             {
@@ -355,7 +351,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async Task LoadRicetteFilter(string category)
+        private async Task LoadRicetteFilter(string category)
         {
             var group = await CrossCloudFirestore.Current.
                Instance.
@@ -368,7 +364,7 @@ namespace KnifeAndSpoon
             TheCarousel.ItemsSource = Ricette;
         }
 
-        public async Task<IEnumerable<Ricetta>> GetRicetta()
+        private async Task<IEnumerable<Ricetta>> GetRicetta()
         {
             var group = await CrossCloudFirestore.Current.
                Instance.
@@ -381,7 +377,7 @@ namespace KnifeAndSpoon
             return ricetta;
         }
 
-        public async Task LoadRicette()
+        private async Task LoadRicette()
         {
             var group = await CrossCloudFirestore.Current.
                Instance.
@@ -393,7 +389,7 @@ namespace KnifeAndSpoon
             TheCarousel.ItemsSource = Ricette;
         }
 
-        public async Task LoadLastTen()
+        private async Task LoadLastTen()
         {
             var group = await CrossCloudFirestore.Current.
                Instance.
@@ -407,7 +403,7 @@ namespace KnifeAndSpoon
             BindableLayout.SetItemsSource(LastTenRecipes, Ricette);
         }
 
-        public async Task LoadUtente()
+        private async Task LoadUtente()
         {
             var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
             List<Utente> list = glob.ToObjects<Utente>().ToList();

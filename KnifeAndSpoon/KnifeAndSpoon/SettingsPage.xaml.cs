@@ -1,8 +1,6 @@
 ﻿using KnifeAndSpoon.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Plugin.FirebaseAuth;
 using Xamarin.Forms;
@@ -20,8 +18,8 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
     {
-        Utente utente;
-        MediaFile imgFile;
+        private Utente utente;
+        private MediaFile imgFile;
         private Command backReturn;
         public SettingsPage(string mode, Utente usr)
         {
@@ -47,24 +45,24 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void Back(object sender, EventArgs args)
+        private void Back(object sender, EventArgs args)
         {
             Navigation.PopAsync();
         }
 
-        public void Approve(object sender, EventArgs args)
+        private void Approve(object sender, EventArgs args)
         {
             PushPage(new ApprovePage(utente));
         }
 
-        public void LogOut(object sender, EventArgs args)
+        private void LogOut(object sender, EventArgs args)
         {
             CrossFirebaseAuth.Current.Instance.SignOut();
             CrossGoogleClient.Current.Logout();
             App.Current.MainPage = new NavigationPage(new MainPage());
         }
 
-        public void UpdatePhoto(object sender, EventArgs args)
+        private void UpdatePhoto(object sender, EventArgs args)
         {
             checkPermissions();
         }
@@ -86,7 +84,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void getPhotoFromCamera()
+        private async void getPhotoFromCamera()
         {
             await CrossMedia.Current.Initialize();
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
@@ -113,7 +111,7 @@ namespace KnifeAndSpoon
             uploadPhotoToFirebaseAsync();
         }
 
-        public async void getPhotoFromGalleryAsync()
+        private async void getPhotoFromGalleryAsync()
         {
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
@@ -140,7 +138,7 @@ namespace KnifeAndSpoon
             uploadPhotoToFirebaseAsync();
         }
 
-        public async Task uploadPhotoToFirebaseAsync()
+        private async Task uploadPhotoToFirebaseAsync()
         {
             loadOverlay.IsVisible = true;
             string filename = utente.Nome + ".jpg";
@@ -157,7 +155,7 @@ namespace KnifeAndSpoon
             loadOverlay.IsVisible = false;
         }
 
-        public static async Task<bool> GetPermissions()
+        private static async Task<bool> GetPermissions()
         {
             bool permissionsGranted = true;
 
@@ -214,7 +212,7 @@ namespace KnifeAndSpoon
             backReturn = command;
         }
 
-        public async void PushPage(ContentPage page)
+        private async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }

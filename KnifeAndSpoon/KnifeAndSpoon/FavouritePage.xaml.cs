@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +13,7 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FavouritePage : ContentPage
     {
-        Utente utente;
+        private Utente utente;
         public ObservableCollection<Ricetta> Ricette { get; private set; }
 
         public FavouritePage(Utente usr)
@@ -25,7 +23,7 @@ namespace KnifeAndSpoon
             loadFavRicette();
         }
 
-        public async Task loadFavRicette()
+        private async Task loadFavRicette()
         {
             if(utente.Preferiti.Count==0)
             {
@@ -46,12 +44,12 @@ namespace KnifeAndSpoon
 
         }
 
-        public void Back(object sender, EventArgs args)
+        private void Back(object sender, EventArgs args)
         {
             Navigation.PopAsync();
         }
 
-        public void OpenRicettaById(object sender, EventArgs args)
+        private void OpenRicettaById(object sender, EventArgs args)
         {
             String value = ((Button)sender).CommandParameter.ToString();
             System.Collections.ObjectModel.ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(FavouriteList);
@@ -68,7 +66,7 @@ namespace KnifeAndSpoon
             }
 
         }
-        public async void PushPage(ContentPage page)
+        private async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }

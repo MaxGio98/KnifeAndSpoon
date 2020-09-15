@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +12,7 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ApprovePage : ContentPage
     {
-        Utente utente;
+        private Utente utente;
         public ApprovePage(Utente usr)
         {
             InitializeComponent();
@@ -23,7 +20,7 @@ namespace KnifeAndSpoon
             LoadAsync();
         }
 
-        public async void LoadAsync()
+        private async void LoadAsync()
         {
             loadOverlay.IsVisible = true;
             var group = await CrossCloudFirestore.Current.
@@ -40,12 +37,12 @@ namespace KnifeAndSpoon
             }
         }
 
-        public void Back(object sender, EventArgs args)
+        private void Back(object sender, EventArgs args)
         {
             Navigation.PopAsync();
         }
 
-        public void OpenRicettaById(object sender, EventArgs args)
+        private void OpenRicettaById(object sender, EventArgs args)
         {
             String value = ((Button)sender).CommandParameter.ToString();
             System.Collections.ObjectModel.ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(List);
@@ -63,7 +60,7 @@ namespace KnifeAndSpoon
             }
 
         }
-        public async void PushPage(ContentPage page)
+        private async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }

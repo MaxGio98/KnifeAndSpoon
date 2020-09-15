@@ -4,10 +4,7 @@ using Plugin.FirebaseAuth;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,8 +13,8 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShowPage : ContentPage
     {
-        Utente Autore;
-        String Mode;
+        private Utente Autore;
+        private String Mode;
         private Ricetta r;
         private Boolean isFav = false;
         private Utente utente;
@@ -95,7 +92,7 @@ namespace KnifeAndSpoon
             backReturn = command;
         }
 
-        public void showCategoria(String categoria)
+        private void showCategoria(String categoria)
         {
             NomeCategoria.Text = categoria;
             switch (categoria)
@@ -119,7 +116,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async Task LoadUtente(String id)
+        private async Task LoadUtente(String id)
         {
 
             var result = await CrossCloudFirestore.Current.Instance.GetDocument("Utenti/" + id).GetDocumentAsync();
@@ -182,7 +179,7 @@ namespace KnifeAndSpoon
             return correctForm;
         }
 
-        public async void setPreferiti()
+        private async void setPreferiti()
         {
             for (int i = 0; i < utente.Preferiti.Count; i++)
             {
@@ -201,7 +198,7 @@ namespace KnifeAndSpoon
             }
         }
 
-        public async void multiFabAction(object sender, EventArgs e)
+        private async void multiFabAction(object sender, EventArgs e)
         {
             if (Mode.Equals("Show"))
             {
@@ -224,7 +221,8 @@ namespace KnifeAndSpoon
                 }
                 else
                 {
-                    Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() => {
+                    await Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() =>
+                    {
                         Device.BeginInvokeOnMainThread(() =>
                         {
                             CrossFirebaseAuth.Current.Instance.SignOut();
@@ -237,7 +235,7 @@ namespace KnifeAndSpoon
             else
             {
                 multiFab.IsEnabled = false;
-                Navigation.PushModalAsync(new ApproveDialog("Cosa vuoi fare?",
+                await Navigation.PushModalAsync(new ApproveDialog("Cosa vuoi fare?",
                     new Command(() =>
                     {
                         approveRicetta();
@@ -245,11 +243,16 @@ namespace KnifeAndSpoon
                     new Command(() =>
                     {
                         removeRicetta();
+                    }),
+                    new Command(async() =>
+                    {
+                        await Navigation.PopModalAsync();
+                        multiFab.IsEnabled = true;
                     })));
             }
         }
 
-        public void approveRicetta()
+        private void approveRicetta()
         {
             Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?",
                     new Command(async () =>
@@ -269,7 +272,7 @@ namespace KnifeAndSpoon
                     ));
         }
 
-        public void removeRicetta()
+        private void removeRicetta()
         {
             Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?",
                     new Command(async () =>
@@ -289,7 +292,7 @@ namespace KnifeAndSpoon
                     ));
         }
 
-        public void Back(object sender, EventArgs args)
+        private void Back(object sender, EventArgs args)
         {
             Navigation.PopAsync();
             if (backReturn != null)

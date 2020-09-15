@@ -1,19 +1,14 @@
-﻿using Plugin.CloudFirestore;
-using Plugin.Connectivity;
+﻿using Plugin.Connectivity;
 using Plugin.DeviceOrientation;
 using Plugin.DeviceOrientation.Abstractions;
-using Plugin.FirebaseAuth;
-using Plugin.GoogleClient;
 using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace KnifeAndSpoon
 {
     public partial class App : Application
     {
-        Boolean connection;
+        private Boolean connection;
         public App()
         {
             InitializeComponent();

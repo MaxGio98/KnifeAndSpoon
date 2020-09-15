@@ -1,15 +1,9 @@
-﻿using KnifeAndSpoon.Model;
-using Plugin.CloudFirestore;
-using Plugin.Connectivity;
+﻿using Plugin.CloudFirestore;
 using Plugin.FirebaseAuth;
 using Plugin.GoogleClient;
 using Plugin.GoogleClient.Shared;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace KnifeAndSpoon
@@ -25,10 +19,9 @@ namespace KnifeAndSpoon
             _googleClientManager = CrossGoogleClient.Current;
             InitializeComponent();
             CheckUser();
-            
         }
 
-        public async void CheckUser()
+        private async void CheckUser()
         {
             if (CrossFirebaseAuth.Current.Instance.CurrentUser != null)
             {
@@ -64,26 +57,32 @@ namespace KnifeAndSpoon
         }
 
 
-        public void login(object sender, EventArgs args)
+        private void login(object sender, EventArgs args)
         {
             LoginAsync();
         }
 
-        public void loginAnonymous(object sender,EventArgs args)
+        private void loginAnonymous(object sender,EventArgs args)
         {
+            anonimous.IsEnabled = false;
+            google.IsEnabled = false;
             LoginAnonimousAsync();
         }
 
-        public async void LoginAnonimousAsync()
+        private async void LoginAnonimousAsync()
         {
             loadOverlay.IsVisible = true;
             await CrossFirebaseAuth.Current.Instance.SignInAnonymouslyAsync();
             loadOverlay.IsVisible = false;
+            anonimous.IsEnabled = true;
+            google.IsEnabled = true;
             App.Current.MainPage = new NavigationPage(new HomePage());
         }
 
-        public async void LoginAsync()
+        private async void LoginAsync()
         {
+            anonimous.IsEnabled = false;
+            google.IsEnabled = false;
             //Start google client manager (Google Login Ui)
             _googleClientManager.OnLogin += OnLoginCompleted;
             try
@@ -93,26 +92,38 @@ namespace KnifeAndSpoon
             catch (GoogleClientSignInNetworkErrorException e)
             {
                 await Navigation.PushModalAsync(new ErrorDialog(e.Message));
+                anonimous.IsEnabled = true;
+                google.IsEnabled = true;
             }
             catch (GoogleClientSignInCanceledErrorException e)
             {
                 await Navigation.PushModalAsync(new ErrorDialog(e.Message));
+                anonimous.IsEnabled = true;
+                google.IsEnabled = true;
             }
             catch (GoogleClientSignInInvalidAccountErrorException e)
             {
                 await Navigation.PushModalAsync(new ErrorDialog(e.Message));
+                anonimous.IsEnabled = true;
+                google.IsEnabled = true;
             }
             catch (GoogleClientSignInInternalErrorException e)
             {
                 await Navigation.PushModalAsync(new ErrorDialog(e.Message));
+                anonimous.IsEnabled = true;
+                google.IsEnabled = true;
             }
             catch (GoogleClientNotInitializedErrorException e)
             {
                 await Navigation.PushModalAsync(new ErrorDialog(e.Message));
+                anonimous.IsEnabled = true;
+                google.IsEnabled = true;
             }
             catch (GoogleClientBaseException e)
             {
                 await Navigation.PushModalAsync(new ErrorDialog(e.Message));
+                anonimous.IsEnabled = true;
+                google.IsEnabled = true;
             }
 
         }
@@ -155,7 +166,7 @@ namespace KnifeAndSpoon
             
         }
 
-        public async void PushPage(ContentPage page)
+        private async void PushPage(ContentPage page)
         {
             await Navigation.PushAsync(page);
         }
