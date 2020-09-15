@@ -11,11 +11,15 @@ namespace KnifeAndSpoon
 {
     public partial class App : Application
     {
+        Boolean connection;
         public App()
         {
             //CrossDeviceOrientation.Current.LockOrientation(DeviceOrientations.Landscape);
             InitializeComponent();
             MainPage = new NavigationPage(new MainPage());
+            connection = false;
+            checkInitialConnection();
+            checkConnection();
         }
 
         protected override void OnStart()
@@ -28,6 +32,44 @@ namespace KnifeAndSpoon
 
         protected override void OnResume()
         {
+        }
+
+        private void checkInitialConnection()
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                var popup = new CustomYesNoBox("Attenzione", "Nessuna connessione");
+                popup.PopupClosed += (o, closedArgs) =>
+                {
+                    checkInitialConnection();
+                };
+                popup.Show();
+                connection = true;
+            }
+            else
+            {
+                connection = false;
+            }
+        }
+
+        private void checkConnection()
+        {
+            CrossConnectivity.Current.ConnectivityChanged += async (sender, agrs) =>
+            {
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    if(!connection)
+                    {
+                        var popup = new CustomYesNoBox("Attenzione", "Nessuna connessione");
+                        popup.PopupClosed += (o, closedArgs) =>
+                        {
+                            checkInitialConnection();
+                        };
+                        connection = true;
+                        popup.Show();
+                    }                    
+                }
+            };
         }
     }
 }
