@@ -224,7 +224,13 @@ namespace KnifeAndSpoon
                 }
                 else
                 {
-                    Navigation.PushModalAsync(new ErrorDialog("Questa funziona è disponibile solo per chi è registrato"));
+                    Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() => {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            CrossFirebaseAuth.Current.Instance.SignOut();
+                            App.Current.MainPage = new NavigationPage(new MainPage());
+                        });
+                    })));
                 }
                 
             }

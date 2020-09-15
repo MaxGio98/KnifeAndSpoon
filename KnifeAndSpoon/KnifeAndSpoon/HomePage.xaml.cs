@@ -38,8 +38,6 @@ namespace KnifeAndSpoon
             }
             ICommand refreshCommand = new Command(async () =>
             {
-                // IsRefreshing is true
-                // Refresh data here
                 await RefreshData();
                 refreshView.IsRefreshing = false;
             });
@@ -167,6 +165,7 @@ namespace KnifeAndSpoon
 
         public void OpenRicettaById(object sender, EventArgs args)
         {
+            OpenFabs(this, null);
             String value = ((Button)sender).CommandParameter.ToString();
             ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(LastTenRecipes);
             for (int i = 0; i < temp.Count; i++)
@@ -181,6 +180,7 @@ namespace KnifeAndSpoon
 
         public void OpenRicetta(object sender, EventArgs args)
         {
+            OpenFabs(this, null);
             String id = ((ImageButton)sender).CommandParameter.ToString();
             for (int i = 0; i < Ricette.Count; i++)
             {
@@ -193,6 +193,7 @@ namespace KnifeAndSpoon
 
         public void SettingsRedirect(object sender, EventArgs args)
         {
+            OpenFabs(this, null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
                 SettingsPage page = new SettingsPage("Normal", utente);
@@ -221,9 +222,16 @@ namespace KnifeAndSpoon
 
         public void openFavorite(object sender, EventArgs args)
         {
+            OpenFabs(this, null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
-                Navigation.PushModalAsync(new ErrorDialog("Questa funziona è disponibile solo per chi è registrato"));
+                Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora",new Command(()=>{
+                    Device.BeginInvokeOnMainThread(()=>
+                    {
+                        CrossFirebaseAuth.Current.Instance.SignOut();
+                        App.Current.MainPage = new NavigationPage(new MainPage());
+                    });
+                })));
             }
             else
             {
@@ -233,14 +241,22 @@ namespace KnifeAndSpoon
 
         public void SearchRedirect(object sender, EventArgs args)
         {
+            OpenFabs(this, null);
             PushPage(new SearchPage(utente));
         }
 
         public void AddRedirect(object sender, EventArgs args)
         {
+            OpenFabs(this,null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
-                Navigation.PushModalAsync(new ErrorDialog("Questa funziona è disponibile solo per chi è registrato"));
+                Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() => {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        CrossFirebaseAuth.Current.Instance.SignOut();
+                        App.Current.MainPage = new NavigationPage(new MainPage());
+                    });
+                })));
             }
             else
             {

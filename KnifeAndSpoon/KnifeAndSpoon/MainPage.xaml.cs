@@ -32,7 +32,6 @@ namespace KnifeAndSpoon
         {
             if (CrossFirebaseAuth.Current.Instance.CurrentUser != null)
             {
-                Console.WriteLine("Ci sta");
                 if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
                 {
                     Device.BeginInvokeOnMainThread(()=>

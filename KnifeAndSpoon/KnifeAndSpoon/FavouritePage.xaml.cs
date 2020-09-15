@@ -29,7 +29,7 @@ namespace KnifeAndSpoon
         {
             if(utente.Preferiti.Count==0)
             {
-                Console.WriteLine("OHHHHHHH");
+                await Navigation.PushModalAsync(new ErrorDialog("Non ci sono ricette nei prefeiriti\nAggiungile ora",new Command(()=> { Navigation.PopAsync(); })));
             }
             else
             {

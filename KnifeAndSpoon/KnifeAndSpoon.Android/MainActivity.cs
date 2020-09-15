@@ -11,6 +11,7 @@ using ImageCircle.Forms.Plugin.Droid;
 using Plugin.Permissions;
 using System.Threading.Tasks;
 using System.IO;
+using Xamarin.Forms;
 
 namespace KnifeAndSpoon.Droid
 {

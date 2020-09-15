@@ -12,15 +12,28 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ErrorDialog : ContentPage
     {
+        Command custom;
+
         public ErrorDialog(string text)
         {
             InitializeComponent();
             label.Text = text;
         }
 
+        public ErrorDialog(string text,Command customOk)
+        {
+            InitializeComponent();
+            label.Text = text;
+            custom = customOk;
+        }
+
         public void okButton(object sender, EventArgs args)
         {
             Navigation.PopModalAsync();
+            if (custom != null)
+            {
+                custom.Execute(custom);
+            }
         }
     }
 }

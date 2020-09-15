@@ -34,6 +34,10 @@ namespace KnifeAndSpoon
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
             BindableLayout.SetItemsSource(List, new ObservableCollection<Ricetta>(ricette));
             loadOverlay.IsVisible = false;
+            if (ricette.Count == 0)
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Non ci sono ricette da approvare", new Command(() => { Navigation.PopAsync(); })));
+            }
         }
 
         public void Back(object sender, EventArgs args)

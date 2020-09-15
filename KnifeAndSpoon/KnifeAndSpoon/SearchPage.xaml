@@ -47,6 +47,9 @@
                     </StackLayout>
                 </StackLayout>
             </ScrollView>
+            <Grid x:Name="noResult" IsVisible="false" VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="La ricerca non ha prodotto risultati" TextColor="Black" FontSize="15"></Label>
+            </Grid>
             <Grid x:Name="loadOverlay" IsVisible="false">
                 <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                     <magic:GradientView.GradientSource>

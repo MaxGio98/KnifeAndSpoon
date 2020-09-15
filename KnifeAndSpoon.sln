@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnifeAndSpoon.Android", "Kn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnifeAndSpoon.iOS", "KnifeAndSpoon\KnifeAndSpoon.iOS\KnifeAndSpoon.iOS.csproj", "{DC191622-A272-487B-ACF8-A6E90C1D655F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnifeAndSpoon", "KnifeAndSpoon\KnifeAndSpoon\KnifeAndSpoon.csproj", "{8A3C3BFF-337F-43DD-9EBC-9162DF824A57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnifeAndSpoon", "KnifeAndSpoon\KnifeAndSpoon\KnifeAndSpoon.csproj", "{8A3C3BFF-337F-43DD-9EBC-9162DF824A57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

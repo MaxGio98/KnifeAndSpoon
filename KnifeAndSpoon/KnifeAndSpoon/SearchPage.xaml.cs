@@ -51,6 +51,14 @@ namespace KnifeAndSpoon
             Console.WriteLine(ricette.Count);
             BindableLayout.SetItemsSource(SearchList, new ObservableCollection<Ricetta>(ricetteFiltered));
             loadOverlay.IsVisible = false;
+            if (ricetteFiltered.Count==0)
+            {
+                noResult.IsVisible = true;
+            }
+            else
+            {
+                noResult.IsVisible = false;
+            }
         }
 
         public void Back(object sender, EventArgs args)

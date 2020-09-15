@@ -1,5 +1,7 @@
 ﻿using Plugin.CloudFirestore;
 using Plugin.Connectivity;
+using Plugin.DeviceOrientation;
+using Plugin.DeviceOrientation.Abstractions;
 using Plugin.FirebaseAuth;
 using Plugin.GoogleClient;
 using System;
@@ -14,8 +16,8 @@ namespace KnifeAndSpoon
         Boolean connection;
         public App()
         {
-            //CrossDeviceOrientation.Current.LockOrientation(DeviceOrientations.Landscape);
             InitializeComponent();
+            CrossDeviceOrientation.Current.LockOrientation(DeviceOrientations.Portrait);
             MainPage = new NavigationPage(new MainPage());
             connection = false;
             checkInitialConnection();
