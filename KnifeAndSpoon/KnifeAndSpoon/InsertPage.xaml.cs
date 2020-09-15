@@ -53,6 +53,7 @@ namespace KnifeAndSpoon
             nome.FontSize = 20;
             nome.TextColor = Color.Black;
             nome.VerticalOptions = LayoutOptions.Center;
+            nome.Keyboard = Keyboard.Text;
             nome.WidthRequest = 150;
             stack.Children.Add(nome);
             Entry qt = new Entry();
@@ -130,6 +131,7 @@ namespace KnifeAndSpoon
             del_button.ImageSource = "remove";
             stack.Children.Add(del_button);
             Editor passText = new Editor();
+            passText.Keyboard = Keyboard.Text;
             passText.Margin = new Thickness(0, 0, 10, 0);
             passText.Keyboard = Keyboard.Chat;
             passText.HorizontalOptions = LayoutOptions.FillAndExpand;

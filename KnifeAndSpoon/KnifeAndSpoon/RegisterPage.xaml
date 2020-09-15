@@ -20,7 +20,7 @@
                 <Label HorizontalOptions="Center" Text="Come ti chiami?" TextColor="White" FontSize="Title" Margin="0,0,0,10"></Label>
                 <controls:CircleImage x:Name="ImgUtente" Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" VerticalOptions="Center" HorizontalOptions="Center" Margin="10,10" HeightRequest="200" WidthRequest="200">
                 </controls:CircleImage>
-                <Entry x:Name="NomeUtente" Margin="0,10,0,0" TextColor="White" PlaceholderColor="White" Placeholder="Nome..." MaxLength="20"></Entry>
+                <Entry x:Name="NomeUtente" Margin="0,10,0,0" TextColor="White" PlaceholderColor="White" Placeholder="Nome..." MaxLength="20" Keyboard="Text"></Entry>
                 <Button x:Name="RegisterButton" Margin="0,10,0,0" Text="Continua" BackgroundColor="White" CornerRadius="25" Clicked="Register"></Button>
             </StackLayout>
             <Grid x:Name="loadOverlay" IsVisible="false">
