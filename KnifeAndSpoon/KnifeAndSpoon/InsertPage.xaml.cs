@@ -180,7 +180,7 @@ namespace KnifeAndSpoon
             var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 AllowCropping = true,
-                CompressionQuality = 1,
+                CompressionQuality = 5,
                 Directory = "Ricette",
                 Name = "test.jpg"
             });
@@ -206,7 +206,7 @@ namespace KnifeAndSpoon
             var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
             {
                 PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                CompressionQuality = 1
+                CompressionQuality = 5
             });
 
 
