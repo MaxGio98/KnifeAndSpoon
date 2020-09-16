@@ -1,6 +1,7 @@
 ﻿using KnifeAndSpoon.Model;
 using Plugin.CloudFirestore;
 using Plugin.FirebaseAuth;
+using Plugin.FirebaseStorage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -309,6 +310,7 @@ namespace KnifeAndSpoon
                          .GetCollection("Ricette")
                          .GetDocument(r.Id)
                          .DeleteDocumentAsync();
+                        await CrossFirebaseStorage.Current.Instance.GetReferenceFromUrl(r.Thumbnail).DeleteAsync();
                         await Navigation.PopAsync();
                         //Aggiorna lista
                         backReturn.Execute(backReturn);

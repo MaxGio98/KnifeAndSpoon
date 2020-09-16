@@ -95,20 +95,29 @@ namespace KnifeAndSpoon
             var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 AllowCropping = true,
+                PhotoSize=PhotoSize.Medium,
+                RotateImage=true,
                 CompressionQuality = 10,
                 Directory = "Profilo",
                 Name = "test.jpg"
             });
             if (file == null)
                 return;
-            imgFile = file;
-            Navigation.PopModalAsync();
-            ImgUtente.Source = ImageSource.FromStream(() =>
+            if (file.GetStream().Length < (700 * 1024))
             {
-                var stream = file.GetStream();
-                return stream;
-            });
-            uploadPhotoToFirebaseAsync();
+                imgFile = file;
+                Navigation.PopModalAsync();
+                ImgUtente.Source = ImageSource.FromStream(() =>
+                {
+                    var stream = file.GetStream();
+                    return stream;
+                });
+                uploadPhotoToFirebaseAsync();
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori (minore di 700kb)"));
+            }
         }
 
         private async void getPhotoFromGalleryAsync()
@@ -120,22 +129,27 @@ namespace KnifeAndSpoon
             }
             var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
             {
+                RotateImage = true,
                 PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
                 CompressionQuality = 10
             });
-
-
             if (file == null)
                 return;
-
-            imgFile = file;
-            Navigation.PopModalAsync();
-            ImgUtente.Source = ImageSource.FromStream(() =>
+            if (file.GetStream().Length < (700 * 1024))
             {
-                var stream = file.GetStream();
-                return stream;
-            });
-            uploadPhotoToFirebaseAsync();
+                imgFile = file;
+                Navigation.PopModalAsync();
+                ImgUtente.Source = ImageSource.FromStream(() =>
+                {
+                    var stream = file.GetStream();
+                    return stream;
+                });
+                uploadPhotoToFirebaseAsync();
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori (minore di 700kb)"));
+            }
         }
 
         private async Task uploadPhotoToFirebaseAsync()

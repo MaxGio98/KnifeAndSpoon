@@ -191,20 +191,30 @@ namespace KnifeAndSpoon
             var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 AllowCropping = true,
-                CompressionQuality = 5,
+                RotateImage = true,
+                PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
+                CompressionQuality = 10,
                 Directory = "Ricette",
                 Name = "test.jpg"
-            });
+            });; ;
             if (file == null)
                 return;
-            imgFile = file;
-            Navigation.PopModalAsync();
-            imgToUpload.Source = ImageSource.FromStream(() =>
+            if (file == null)
+                return;
+            if (file.GetStream().Length < (700 * 1024))
             {
-                var stream = file.GetStream();
-                return stream;
-            });
-
+                imgFile = file;
+                Navigation.PopModalAsync();
+                imgToUpload.Source = ImageSource.FromStream(() =>
+                {
+                    var stream = file.GetStream();
+                    return stream;
+                });
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori (minore di 700kb)"));
+            }
         }
 
         private async void getPhotoFromGalleryAsync()
@@ -216,22 +226,28 @@ namespace KnifeAndSpoon
             }
             var file = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
             {
+                RotateImage = true,
                 PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                CompressionQuality = 5
+                CompressionQuality = 10
             });
 
 
             if (file == null)
                 return;
-
-            imgFile = file;
-            Navigation.PopModalAsync();
-            imgToUpload.Source = ImageSource.FromStream(() =>
+            if (file.GetStream().Length < (700 * 1024))
             {
-                var stream = file.GetStream();
-                return stream;
-            });
-
+                imgFile = file;
+                Navigation.PopModalAsync();
+                imgToUpload.Source = ImageSource.FromStream(() =>
+                {
+                    var stream = file.GetStream();
+                    return stream;
+                });
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori (minore di 700kb)"));
+            }
         }
 
         private static async Task<bool> GetPermissions()
