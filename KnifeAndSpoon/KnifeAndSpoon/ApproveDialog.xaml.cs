@@ -10,8 +10,14 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             label.Text = text;
-            Approva.Command = approveComm;
-            NonApprova.Command = nonComm;
+            Approva.Command = new Command(() => {
+                Approva.IsEnabled = false;
+                approveComm.Execute(approveComm);
+            });
+            NonApprova.Command = new Command(() => {
+                NonApprova.IsEnabled = false;
+                nonComm.Execute(approveComm);
+            });
             abort.Command = new Command(() => { Navigation.PopModalAsync(); });
         }
 
@@ -19,8 +25,14 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             label.Text = text;
-            Approva.Command = approveComm;
-            NonApprova.Command = nonComm;
+            Approva.Command = new Command(() => {
+                Approva.IsEnabled = false;
+                approveComm.Execute(approveComm);
+            });
+            NonApprova.Command = new Command(() => {
+                NonApprova.IsEnabled = false;
+                nonComm.Execute(approveComm);
+            });
             abort.Command = abortCommand;
         }
     }

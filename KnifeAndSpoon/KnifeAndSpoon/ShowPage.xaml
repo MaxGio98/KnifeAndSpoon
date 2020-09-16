@@ -38,7 +38,7 @@
                                 <Label x:Name="Titolo" TextColor="Black" FontSize="30" Margin="25,25,25,15">
                                 </Label>
                                 <StackLayout Orientation="Horizontal" Margin="25,10,0,0">
-                                    <controls:CircleImage x:Name="ImgAutore" Source="pizza" Aspect="AspectFit" BorderThickness="0" HeightRequest="50" WidthRequest="50">
+                                    <controls:CircleImage x:Name="ImgAutore" Source="pizza" Aspect="AspectFit" BorderThickness="2" HeightRequest="50" WidthRequest="50">
                                     </controls:CircleImage>
                                     <StackLayout Margin="10,0,0,0">
                                         <Label Text="Autore" TextColor="Black" HorizontalOptions="Start"></Label>

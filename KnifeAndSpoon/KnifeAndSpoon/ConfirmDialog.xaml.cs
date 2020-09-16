@@ -16,7 +16,10 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             label.Text = text;
-            ok.Command = okComm;
+            ok.Command = new Command(() => {
+                ok.IsEnabled = false;
+                okComm.Execute(okComm);
+            });
             no.Command = noComm;
             abort.Command = new Command(()=> { Navigation.PopModalAsync();});
         }
@@ -25,7 +28,10 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             label.Text = text;
-            ok.Command = okComm;
+            ok.Command = new Command(() => {
+                ok.IsEnabled = false;
+                okComm.Execute(okComm);
+            });
             no.Command = new Command(() => { Navigation.PopModalAsync(); });
             abort.IsEnabled = false;
             abort.IsVisible = false;

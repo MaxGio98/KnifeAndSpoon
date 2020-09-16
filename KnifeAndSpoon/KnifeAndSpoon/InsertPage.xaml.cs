@@ -276,12 +276,12 @@ namespace KnifeAndSpoon
             return permissionsGranted;
         }
 
-        private void publishRecipeToFirebase(object sender, EventArgs e)
+        private async void publishRecipeToFirebase(object sender, EventArgs e)
         {
             confirmFab.IsEnabled = false;
             if (imgFile == null)
             {
-                Navigation.PushModalAsync(new ErrorDialog("Inserisci un'immagine della ricetta"));
+                await Navigation.PushModalAsync(new ErrorDialog("Inserisci un'immagine della ricetta"));
                 confirmFab.IsEnabled = true;
             }
             else
@@ -304,7 +304,7 @@ namespace KnifeAndSpoon
                 }
                 else
                 {
-                    Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
+                    await Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
                     confirmFab.IsEnabled = true;
                     return;
                 }
@@ -312,7 +312,7 @@ namespace KnifeAndSpoon
             }
             else
             {
-                Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
+                await Navigation.PushModalAsync(new ErrorDialog("Il titolo non può essere vuoto"));
                 confirmFab.IsEnabled = true;
                 return;
             }
@@ -333,7 +333,7 @@ namespace KnifeAndSpoon
             }
             else
             {
-                Navigation.PushModalAsync(new ErrorDialog("Controlla il tempo di preparazione"));
+                await Navigation.PushModalAsync(new ErrorDialog("Controlla il tempo di preparazione"));
                 confirmFab.IsEnabled = true;
                 return;
             }
@@ -346,7 +346,7 @@ namespace KnifeAndSpoon
                 }
                 else
                 {
-                    Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
+                    await Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
                     confirmFab.IsEnabled = true;
                     return;
                 }
@@ -354,7 +354,7 @@ namespace KnifeAndSpoon
             }
             else
             {
-                Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
+                await Navigation.PushModalAsync(new ErrorDialog("Controlla il numero delle persone"));
                 confirmFab.IsEnabled = true;
                 return;
             }
@@ -378,14 +378,14 @@ namespace KnifeAndSpoon
                         }
                         else
                         {
-                            Navigation.PushModalAsync(new ErrorDialog("Il nome dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                            await Navigation.PushModalAsync(new ErrorDialog("Il nome dell'ingrediente n°" + (i + 1) + " è vuoto"));
                             confirmFab.IsEnabled = true;
                             return;
                         }
                     }
                     else
                     {
-                        Navigation.PushModalAsync(new ErrorDialog("Il nome dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                        await Navigation.PushModalAsync(new ErrorDialog("Il nome dell'ingrediente n°" + (i + 1) + " è vuoto"));
                         confirmFab.IsEnabled = true;
                         return;
                     }
@@ -407,7 +407,7 @@ namespace KnifeAndSpoon
                                 }
                                 else
                                 {
-                                    Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " non può essere 0"));
+                                    await Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " non può essere 0"));
                                     confirmFab.IsEnabled = true;
                                     return;
                                 }
@@ -415,7 +415,7 @@ namespace KnifeAndSpoon
                             }
                             else
                             {
-                                Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                                await Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
                                 confirmFab.IsEnabled = true;
                                 return;
                             }
@@ -423,7 +423,7 @@ namespace KnifeAndSpoon
                         }
                         else
                         {
-                            Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
+                            await Navigation.PushModalAsync(new ErrorDialog("La quantità dell'ingrediente n°" + (i + 1) + " è vuoto"));
                             confirmFab.IsEnabled = true;
                             return;
                         }
@@ -439,7 +439,7 @@ namespace KnifeAndSpoon
             }
             else
             {
-                Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un ingrediente"));
+                await Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un ingrediente"));
                 confirmFab.IsEnabled = true;
                 return;
             }
@@ -458,14 +458,14 @@ namespace KnifeAndSpoon
                         }
                         else
                         {
-                            Navigation.PushModalAsync(new ErrorDialog("Il passaggio n°" + (i + 1) + " è vuoto"));
+                            await Navigation.PushModalAsync(new ErrorDialog("Il passaggio n°" + (i + 1) + " è vuoto"));
                             confirmFab.IsEnabled = true;
                             return;
                         }
                     }
                     else
                     {
-                        Navigation.PushModalAsync(new ErrorDialog("Il passaggio n°" + (i + 1) + " è vuoto"));
+                        await Navigation.PushModalAsync(new ErrorDialog("Il passaggio n°" + (i + 1) + " è vuoto"));
                         confirmFab.IsEnabled = true;
                         return;
                     }
@@ -474,7 +474,7 @@ namespace KnifeAndSpoon
             }
             else
             {
-                Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un passaggio"));
+                await Navigation.PushModalAsync(new ErrorDialog("Inserisci almeno un passaggio"));
                 confirmFab.IsEnabled = true;
                 return;
             }
@@ -500,7 +500,6 @@ namespace KnifeAndSpoon
                     await CrossCloudFirestore.Current.Instance.GetCollection("Ricette").AddDocumentAsync(ricetta);
                     await Navigation.PushModalAsync(new ErrorDialog("La tua ricetta è in fase di approvazione"));
                     await Navigation.PopAsync();
-                    confirmFab.IsEnabled = true;
                 })));
         }
 
