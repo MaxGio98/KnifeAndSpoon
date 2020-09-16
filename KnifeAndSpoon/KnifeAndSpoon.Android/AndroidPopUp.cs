@@ -4,6 +4,7 @@ using Plugin.CurrentActivity;
 using Android.App;
 using Android.Widget;
 using KnifeAndSpoon.Droid;
+using Google.Android.Material.Snackbar;
 
 [assembly: Dependency(typeof(AndroidPopUp))]
 
