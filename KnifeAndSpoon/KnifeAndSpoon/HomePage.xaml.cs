@@ -141,24 +141,12 @@ namespace KnifeAndSpoon
             }
         }
 
-        private async Task CloseFabsWithWait()
-        {
-            await Task.Delay(2000);
-            isFabsOpen = !isFabsOpen;
-            mainFab.RotateTo(-45, 150);
-            settingsFab.TranslateTo(0, 0, 150);
-            settingsFab.FadeTo(0, 150); ;
-            favouriteFab.TranslateTo(0, 0, 150);
-            favouriteFab.FadeTo(0, 150);
-            searchFab.TranslateTo(0, 0, 150);
-            searchFab.FadeTo(0, 150);
-            addFab.TranslateTo(0, 0, 150);
-            addFab.FadeTo(0, 150);
-        }
-
         private void OpenRicettaById(object sender, EventArgs args)
         {
-            OpenFabs(this, null);
+            if (isFabsOpen == true)
+            {
+                OpenFabs(this, null);
+            }
             String value = ((Button)sender).CommandParameter.ToString();
             ObservableCollection<Ricetta> temp = (ObservableCollection<Ricetta>)BindableLayout.GetItemsSource(LastTenRecipes);
             for (int i = 0; i < temp.Count; i++)
@@ -173,7 +161,10 @@ namespace KnifeAndSpoon
 
         private void OpenRicetta(object sender, EventArgs args)
         {
-            OpenFabs(this, null);
+            if (isFabsOpen == true)
+            {
+                OpenFabs(this, null);
+            }
             String id = ((ImageButton)sender).CommandParameter.ToString();
             for (int i = 0; i < Ricette.Count; i++)
             {
