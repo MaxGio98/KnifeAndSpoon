@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
-             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients" xmlns:local="clr-namespace:KnifeAndSpoon"
              mc:Ignorable="d"
              BackgroundColor="White"
              x:Class="KnifeAndSpoon.ShowPage"
@@ -27,7 +27,11 @@
                         <Button x:Name="backFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="10" HorizontalOptions="Start" VerticalOptions="Start" TextColor="White" Image="back" Clicked="Back"/>
                     </Grid>
                     <StackLayout>
-                        <Button x:Name="multiFab" Clicked="multiFabAction" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White"/>
+                        <Button x:Name="multiFab" Clicked="multiFabAction" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White">
+                            <Button.Behaviors>
+                                <local:LongPressBehaviorButton LongPressed="longClickMultiFab"/>
+                            </Button.Behaviors>
+                        </Button>
 
                         <Frame CornerRadius="25"
                        HasShadow="False"

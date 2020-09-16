@@ -87,6 +87,26 @@ namespace KnifeAndSpoon
             LoadUtente(ricetta.Autore);
         }
 
+        private void longClickMultiFab(object sender,EventArgs e)
+        {
+            if (Mode.Equals("Show"))
+            {
+                if(isFav)
+                {
+                    DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Rimuovi dai preferiti");
+                }
+                else
+                {
+                    DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiungi ai preferiti");
+
+                }
+            }
+            else if (Mode.Equals("Admin"))
+            {
+                DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Approvare o non approvare la ricetta");
+            }
+        }
+
         public void enableBackReturn(Command command)
         {
             backReturn = command;
@@ -210,6 +230,8 @@ namespace KnifeAndSpoon
                         utente.Preferiti.Remove(r.Id);
                         await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
                         multiFab.ImageSource = "favourite";
+                        DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Rimosso dai preferiti");
+
                     }
                     else
                     {
@@ -217,6 +239,8 @@ namespace KnifeAndSpoon
                         utente.Preferiti.Add(r.Id);
                         await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync("Preferiti", utente.Preferiti);
                         multiFab.ImageSource = "favourite_full";
+                        DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiunto ai preferiti");
+
                     }
                 }
                 else

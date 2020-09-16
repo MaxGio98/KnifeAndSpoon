@@ -100,6 +100,17 @@ namespace KnifeAndSpoon
             stack.Children.Add(ut);
             lst_ingredienti.Children.Add(stack);
         }
+
+        private void longClickAddPicFab(object sender,EventArgs e)
+        {
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiungi una foto");
+        }
+        private void longClickBackFab(object sender, EventArgs e)
+        {
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Torna indietro");
+        }
+        
+
         private void OnTextChanged(object s, EventArgs e)
         {
             Entry entry = s as Entry;

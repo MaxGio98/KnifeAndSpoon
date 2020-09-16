@@ -45,30 +45,27 @@ namespace KnifeAndSpoon
             TheCarousel.Position = 0;
         }
 
-        private async void checkConnection()
+        private void longPressMainFab(object sender,EventArgs e)
         {
-            if (!CrossConnectivity.Current.IsConnected)
-            {
-                await DisplayAlert("aeeee","ehhh",null);
-            }
-            CrossConnectivity.Current.ConnectivityChanged += async (sender, agrs) =>
-            {
-                if (!CrossConnectivity.Current.IsConnected)
-                {
-                    await DisplayAlert("aeeee", "ehhh", "oooh");
-                }
-                else
-                {
-                    Navigation.PopModalAsync();
-                }
-            };
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Menu");
         }
 
-        private void DisplayAlert(string v)
+        private void longPressSettingsFab(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Impostazioni");
         }
-
+        private void longPressFavouriteFab(object sender, EventArgs e)
+        {
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Ricette preferite");
+        }
+        private void longPressSearchFab(object sender, EventArgs e)
+        {
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Ricerca una ricetta");
+        }
+        private void longPressAddFab(object sender, EventArgs e)
+        {
+            DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiungi una ricetta");
+        }
         private async Task RefreshData()
         {
             await LoadRicette();

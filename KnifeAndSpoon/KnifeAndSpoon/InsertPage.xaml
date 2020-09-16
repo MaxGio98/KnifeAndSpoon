@@ -23,11 +23,19 @@
                             </magic:LinearGradient>
                         </magic:GradientView.GradientSource>
                     </magic:GradientView>
-                    <Button x:Name="backFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="10" HorizontalOptions="Start" VerticalOptions="Start" TextColor="White" Image="back" Clicked="Back"/>
+                    <Button x:Name="backFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="10" HorizontalOptions="Start" VerticalOptions="Start" TextColor="White" Image="back" Clicked="Back">
+                        <Button.Behaviors>
+                            <local:LongPressBehaviorButton LongPressed="longClickBackFab"/>
+                        </Button.Behaviors>
+                    </Button>
 
                 </Grid>
                 <StackLayout>
-                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera" Clicked="checkPermissions"/>
+                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera" Clicked="checkPermissions">
+                        <Button.Behaviors>
+                            <local:LongPressBehaviorButton LongPressed="longClickAddPicFab"/>
+                        </Button.Behaviors>
+                    </Button>
 
                     <Frame CornerRadius="25"
                        HasShadow="False"

@@ -87,6 +87,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+	<Compile Include="AndroidPopUp.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="PhotoPickerService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
