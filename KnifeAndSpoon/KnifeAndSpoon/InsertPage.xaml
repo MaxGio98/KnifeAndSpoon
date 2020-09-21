@@ -23,7 +23,7 @@
                             </magic:LinearGradient>
                         </magic:GradientView.GradientSource>
                     </magic:GradientView>
-                    <Button x:Name="backFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="10" HorizontalOptions="Start" VerticalOptions="Start" TextColor="White" Image="back" Clicked="Back">
+                    <Button x:Name="backFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="25" Margin="10" HorizontalOptions="Start" VerticalOptions="Start" TextColor="White" Image="back" Clicked="Back">
                         <Button.Behaviors>
                             <local:LongPressBehaviorButton LongPressed="longClickBackFab"/>
                         </Button.Behaviors>
@@ -31,7 +31,7 @@
 
                 </Grid>
                 <StackLayout>
-                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="50" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera" Clicked="checkPermissions">
+                    <Button x:Name="addFab" HeightRequest="50" WidthRequest="50" BackgroundColor="#b10000" CornerRadius="25" Margin="0,0,10,10" HorizontalOptions="End" TextColor="White" Image="camera" Clicked="checkPermissions">
                         <Button.Behaviors>
                             <local:LongPressBehaviorButton LongPressed="longClickAddPicFab"/>
                         </Button.Behaviors>
@@ -66,7 +66,7 @@
                             </Label>
                             <StackLayout x:Name="lst_ingredienti">
                             </StackLayout>
-                            <Button Margin="10,0,10,0" HeightRequest="50" Text="Aggiungi ingrediente" FontSize="15" CornerRadius="50" BackgroundColor="#b10000" TextColor="White" Clicked="AddIngrediente"></Button>
+                            <Button Margin="10,0,10,0" HeightRequest="50" Text="Aggiungi ingrediente" FontSize="15" CornerRadius="25" BackgroundColor="#b10000" TextColor="White" Clicked="AddIngrediente"></Button>
                             <Label Text="Passaggi" TextColor="Black" FontSize="20" Margin="25,0,0,0">
                             </Label>
                             <StackLayout x:Name="lst_passaggi">
@@ -77,7 +77,7 @@
                 </StackLayout>
             </StackLayout>
         </ScrollView>
-        <Button x:Name="confirmFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="50" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,10,10" Text="Pubblica" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="publishRecipeToFirebase"/>
+        <Button x:Name="confirmFab" HeightRequest="40" BackgroundColor="#b10000" CornerRadius="25" HorizontalOptions="End" VerticalOptions="End"  Margin="0,0,10,10" Text="Pubblica" TextColor="White" Padding="20,0,20,0" Image="pencil" Clicked="publishRecipeToFirebase"/>
         <Grid x:Name="loadOverlay" IsVisible="false">
             <magic:GradientView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <magic:GradientView.GradientSource>

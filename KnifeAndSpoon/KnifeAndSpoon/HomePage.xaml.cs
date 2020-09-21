@@ -402,12 +402,12 @@ namespace KnifeAndSpoon
 
         protected override bool OnBackButtonPressed()
         {
-            var time = System.DateTime.Now;
             //Are you sure?
             Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro di voler uscire?", new Command(async () =>
             {
                 await Navigation.PopModalAsync();
-                await Navigation.PopAsync();
+                if (Device.RuntimePlatform == Device.Android)
+                    DependencyService.Get<IAndroidMethods>().CloseApp();
             })));
             return true;
         }
