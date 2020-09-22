@@ -297,6 +297,7 @@ namespace KnifeAndSpoon
                         {
                         }
                             Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.",new Command(async ()=> {
+                                await Navigation.PopModalAsync();
                                 await Navigation.PopAsync();
                             })));
                         //Aggiorna lista
