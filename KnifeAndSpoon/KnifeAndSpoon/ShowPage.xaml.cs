@@ -284,12 +284,18 @@ namespace KnifeAndSpoon
                     {
                         await Navigation.PopModalAsync();
                         await Navigation.PopModalAsync();
-                        //Modifica Firebase
-                        await CrossCloudFirestore.Current
-                         .Instance
-                         .GetCollection("Ricette")
-                         .GetDocument(r.Id)
-                         .UpdateDataAsync(new { isApproved = true });
+                        try
+                        {
+                            //Modifica Firebase
+                            await CrossCloudFirestore.Current.
+                            Instance.GetCollection("Ricette").
+                            GetDocument(r.Id).
+                            UpdateDataAsync(new { isApproved = true });
+                        }
+                        catch(Exception e)
+                        {
+                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore."));
+                        }
                         await Navigation.PopAsync();
                         //Aggiorna lista
                         backReturn.Execute(backReturn);
