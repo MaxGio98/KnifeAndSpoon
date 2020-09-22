@@ -297,7 +297,7 @@ namespace KnifeAndSpoon
                         }
                         catch(Exception e)
                         {
-                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
+                                Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
                                 await Navigation.PopAsync();
                                 backReturn.Execute(backReturn);
                             })));
@@ -313,16 +313,29 @@ namespace KnifeAndSpoon
                     {
                         await Navigation.PopModalAsync();
                         await Navigation.PopModalAsync();
-                        //Rimuove da Firebase
-                        await CrossCloudFirestore.Current
-                         .Instance
-                         .GetCollection("Ricette")
-                         .GetDocument(r.Id)
-                         .DeleteDocumentAsync();
-                        await CrossFirebaseStorage.Current.Instance.GetReferenceFromUrl(r.Thumbnail).DeleteAsync();
-                        await Navigation.PopAsync();
-                        //Aggiorna lista
-                        backReturn.Execute(backReturn);
+                        try
+                        {
+                            //Rimuove da Firebase
+                            await CrossCloudFirestore.Current
+                            .Instance
+                            .GetCollection("Ricette")
+                            .GetDocument(r.Id)
+                            .DeleteDocumentAsync();
+                            await CrossFirebaseStorage.Current.Instance.GetReferenceFromUrl(r.Thumbnail).DeleteAsync();
+                            await Navigation.PopAsync();
+                            //Aggiorna lista
+                            backReturn.Execute(backReturn);
+                        }
+                        catch(Exception e)
+                        {
+                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
+                                await Navigation.PopAsync();
+                                backReturn.Execute(backReturn);
+                            })));
+                        }
+                        
+                        
+
                     })
                     ));
         }
