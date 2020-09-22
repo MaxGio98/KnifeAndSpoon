@@ -10,11 +10,13 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             label.Text = text;
-            Approva.Command = new Command(() => {
+            Approva.Command = new Command(() =>
+            {
                 Approva.IsEnabled = false;
                 approveComm.Execute(approveComm);
             });
-            NonApprova.Command = new Command(() => {
+            NonApprova.Command = new Command(() =>
+            {
                 NonApprova.IsEnabled = false;
                 nonComm.Execute(approveComm);
             });
@@ -25,11 +27,13 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             label.Text = text;
-            Approva.Command = new Command(() => {
+            Approva.Command = new Command(() =>
+            {
                 Approva.IsEnabled = false;
                 approveComm.Execute(approveComm);
             });
-            NonApprova.Command = new Command(() => {
+            NonApprova.Command = new Command(() =>
+            {
                 NonApprova.IsEnabled = false;
                 nonComm.Execute(approveComm);
             });

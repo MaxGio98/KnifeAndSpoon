@@ -20,7 +20,7 @@ namespace KnifeAndSpoon
             label.Text = text;
         }
 
-        public ErrorDialog(string text,Command customOk)
+        public ErrorDialog(string text, Command customOk)
         {
             InitializeComponent();
             label.Text = text;

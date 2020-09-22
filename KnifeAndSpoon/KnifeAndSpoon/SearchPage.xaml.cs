@@ -25,15 +25,26 @@ namespace KnifeAndSpoon
 
         private void Search(object sender, EventArgs args)
         {
+            //se è stato inserito qualche carattere che non sia lo spazio, allora si lancia la ricerca
             if (searchField.Text != null)
             {
-                SearchAsync(searchField.Text);
+                if (!(searchField.Text.Trim().Equals("")))
+                {
+                    SearchAsync(searchField.Text);
+                }
+                else
+                {
+                    DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Inserisci qualcosa da ricercare!");
+                }
+            }
+            else
+            {
+                DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Inserisci qualcosa da ricercare!");
             }
         }
 
         private async void SearchAsync(string value)
         {
-            Console.WriteLine(value);
             loadOverlay.IsVisible = true;
             var group = await CrossCloudFirestore.Current.
                Instance.
@@ -42,17 +53,17 @@ namespace KnifeAndSpoon
                GetDocumentsAsync();
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
             List<Ricetta> ricetteFiltered = new List<Ricetta>();
-            for(int i = 0; i < ricette.Count; i++)
+            for (int i = 0; i < ricette.Count; i++)
             {
+                //se ciò che è stato cercato è contenuto nel titolo delle ricette approvate, allora si aggiunge il tutto alle ricette filtrate da visualizzare
                 if (ricette[i].Titolo.ToLower().Contains(value.ToLower()))
                 {
                     ricetteFiltered.Add(ricette[i]);
                 }
             }
-            Console.WriteLine(ricette.Count);
             BindableLayout.SetItemsSource(SearchList, new ObservableCollection<Ricetta>(ricetteFiltered));
             loadOverlay.IsVisible = false;
-            if (ricetteFiltered.Count==0)
+            if (ricetteFiltered.Count == 0)
             {
                 noResult.IsVisible = true;
             }

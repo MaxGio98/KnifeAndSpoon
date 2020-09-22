@@ -20,6 +20,7 @@ namespace KnifeAndSpoon
             LoadAsync();
         }
 
+        //carica ricette da approvare (isApproved==false)
         private async void LoadAsync()
         {
             loadOverlay.IsVisible = true;

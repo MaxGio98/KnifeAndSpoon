@@ -7,7 +7,7 @@ namespace KnifeAndSpoon.Droid.Implementation
 {
     public class YesNoPopupLoader : IYesNoPopupLoader
     {
-        public void ShowPopup(CustomYesNoBox popup)
+        public void ShowPopup(CustomBox popup)
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(Forms.Context);
             var alert = new AlertDialog.Builder(Forms.Context);

@@ -25,7 +25,8 @@ namespace KnifeAndSpoon
         {
             InitializeComponent();
             utente = usr;
-            if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous) 
+            //caricamento ui corretta a seconda del tipo di utente che entra nelle impostazioni
+            if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
                 ImgUtente.Source = "pizza";
                 approve.IsVisible = false;
@@ -67,6 +68,7 @@ namespace KnifeAndSpoon
             checkPermissions();
         }
 
+        //controlla permessi
         private async void checkPermissions()
         {
             if (await GetPermissions())
@@ -84,6 +86,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //metodo per acquisire un'immagine dalla fotocamera
         private async void getPhotoFromCamera()
         {
             await CrossMedia.Current.Initialize();
@@ -95,8 +98,8 @@ namespace KnifeAndSpoon
             var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 AllowCropping = true,
-                PhotoSize=PhotoSize.Medium,
-                RotateImage=true,
+                PhotoSize = PhotoSize.Medium,
+                RotateImage = true,
                 CompressionQuality = 10,
                 Directory = "Profilo",
                 Name = "test.jpg"
@@ -120,6 +123,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //metodo per acquisire un'immagine dalla galleria
         private async void getPhotoFromGalleryAsync()
         {
             if (!CrossMedia.Current.IsPickPhotoSupported)
@@ -152,6 +156,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //carica immagine a firebase
         private async Task uploadPhotoToFirebaseAsync()
         {
             loadOverlay.IsVisible = true;
@@ -164,11 +169,12 @@ namespace KnifeAndSpoon
             };
             await reference.PutStreamAsync(imgFile.GetStream(), progress: uploadProgress);
             String path = (await reference.GetDownloadUrlAsync()).ToString();
-            await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync(new {Immagine=path});
+            await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").GetDocument(utente.Id).UpdateDataAsync(new { Immagine = path });
             backReturn.Execute(backReturn);
             loadOverlay.IsVisible = false;
         }
 
+        //richiede i permessi
         private static async Task<bool> GetPermissions()
         {
             bool permissionsGranted = true;

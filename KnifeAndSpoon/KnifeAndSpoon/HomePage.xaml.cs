@@ -45,7 +45,8 @@ namespace KnifeAndSpoon
             TheCarousel.Position = 0;
         }
 
-        private void longPressMainFab(object sender,EventArgs e)
+        //inizio metodi gestione long press
+        private void longPressMainFab(object sender, EventArgs e)
         {
             DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Menu");
         }
@@ -66,11 +67,15 @@ namespace KnifeAndSpoon
         {
             DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiungi una ricetta");
         }
+        //fine metodi gestione long press
+
+
         private async Task RefreshData()
         {
             await LoadRicette();
             await LoadLastTen();
         }
+
 
 
         private void OpenFabs(object sender, EventArgs args)
@@ -81,7 +86,7 @@ namespace KnifeAndSpoon
                 isFabsOpen = !isFabsOpen;
                 try
                 {
-                    if (cts!=null)
+                    if (cts != null)
                     {
                         cts.Cancel();
                         cts = null;
@@ -89,7 +94,7 @@ namespace KnifeAndSpoon
                     cts = new CancellationTokenSource();
                     Task.Run(async () =>
                     {
-                        await Task.Delay(5000,cts.Token);
+                        await Task.Delay(5000, cts.Token);
                         Device.BeginInvokeOnMainThread(() =>
                         {
                             isFabsOpen = !isFabsOpen;
@@ -103,12 +108,12 @@ namespace KnifeAndSpoon
                             addFab.TranslateTo(0, 0, 150);
                             addFab.FadeTo(0, 150);
                         });
-                    },cts.Token);
+                    }, cts.Token);
                 }
                 catch (OperationCanceledException e)
-                {}
+                { }
                 catch (Exception e)
-                {}
+                { }
 
                 mainFab.RotateTo(45, 150);
                 settingsFab.TranslateTo(-210, 0, 150);
@@ -175,6 +180,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //redirect alla page impostazioni
         private void SettingsRedirect(object sender, EventArgs args)
         {
             OpenFabs(this, null);
@@ -188,7 +194,8 @@ namespace KnifeAndSpoon
                 if (utente.isAdmin)
                 {
                     SettingsPage page = new SettingsPage("Admin", utente);
-                    page.enableBackReturn(new Command(() => {
+                    page.enableBackReturn(new Command(() =>
+                    {
                         LoadUtente();
                     }));
                     PushPage(page);
@@ -196,7 +203,8 @@ namespace KnifeAndSpoon
                 else
                 {
                     SettingsPage page = new SettingsPage("Normal", utente);
-                    page.enableBackReturn(new Command(() => {
+                    page.enableBackReturn(new Command(() =>
+                    {
                         LoadUtente();
                     }));
                     PushPage(page);
@@ -204,13 +212,15 @@ namespace KnifeAndSpoon
             }
         }
 
+        //redirect alla page dei preferiti
         private void openFavorite(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
-                Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora",new Command(()=>{
-                    Device.BeginInvokeOnMainThread(()=>
+                Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
                     {
                         CrossFirebaseAuth.Current.Instance.SignOut();
                         App.Current.MainPage = new NavigationPage(new MainPage());
@@ -223,18 +233,21 @@ namespace KnifeAndSpoon
             }
         }
 
+        //redirect alla page di ricerca
         private void SearchRedirect(object sender, EventArgs args)
         {
             OpenFabs(this, null);
             PushPage(new SearchPage(utente));
         }
 
+        //redirect alla page di aggiunta di una ricetta
         private void AddRedirect(object sender, EventArgs args)
         {
-            OpenFabs(this,null);
+            OpenFabs(this, null);
             if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
             {
-                Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() => {
+                Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() =>
+                {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         CrossFirebaseAuth.Current.Instance.SignOut();
@@ -253,6 +266,7 @@ namespace KnifeAndSpoon
             await Navigation.PushAsync(page);
         }
 
+        //inizio metodi gestione dei filtri delle ricette
         private void DisableFilter()
         {
             checkAntipasto.IsVisible = false;
@@ -351,6 +365,7 @@ namespace KnifeAndSpoon
             Ricette = new ObservableCollection<Ricetta>(ricette);
             TheCarousel.ItemsSource = Ricette;
         }
+        //fine metodi gestione dei filtri delle ricette
 
         private async Task<IEnumerable<Ricetta>> GetRicetta()
         {
@@ -359,24 +374,24 @@ namespace KnifeAndSpoon
                GetCollection("Ricette").
                GetDocumentsAsync();
             List<Ricetta> ricetta = group.ToObjects<Ricetta>().ToList();
-
-            Debug.WriteLine(ricetta[0].NumeroPersone);
-            Debug.WriteLine(ricetta[0].Passaggi.Count);
             return ricetta;
         }
 
+        //carica ricette approvate
         private async Task LoadRicette()
         {
             var group = await CrossCloudFirestore.Current.
                Instance.
                GetCollection("Ricette").
                WhereEqualsTo("isApproved", true).
+               LimitTo(10).
                GetDocumentsAsync();
             List<Ricetta> ricette = group.ToObjects<Ricetta>().ToList();
             Ricette = new ObservableCollection<Ricetta>(ricette);
             TheCarousel.ItemsSource = Ricette;
         }
 
+        //carica ultime 10 ricette approvate
         private async Task LoadLastTen()
         {
             var group = await CrossCloudFirestore.Current.
@@ -391,6 +406,7 @@ namespace KnifeAndSpoon
             BindableLayout.SetItemsSource(LastTenRecipes, Ricette);
         }
 
+        //carica dati utente
         private async Task LoadUtente()
         {
             var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();

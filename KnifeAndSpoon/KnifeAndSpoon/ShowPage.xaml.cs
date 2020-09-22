@@ -88,11 +88,11 @@ namespace KnifeAndSpoon
             LoadUtente(ricetta.Autore);
         }
 
-        private void longClickMultiFab(object sender,EventArgs e)
+        private void longClickMultiFab(object sender, EventArgs e)
         {
             if (Mode.Equals("Show"))
             {
-                if(isFav)
+                if (isFav)
                 {
                     DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Rimuovi dai preferiti");
                 }
@@ -141,9 +141,6 @@ namespace KnifeAndSpoon
         {
 
             var result = await CrossCloudFirestore.Current.Instance.GetDocument("Utenti/" + id).GetDocumentAsync();
-
-            Console.WriteLine(result.Data["Nome"].ToString());
-            Console.WriteLine(result.Data["Immagine"].ToString());
             ImgAutore.Source = result.Data["Immagine"].ToString();
             NomeAutore.Text = result.Data["Nome"].ToString();
         }
@@ -200,6 +197,7 @@ namespace KnifeAndSpoon
             return correctForm;
         }
 
+        //imposta la grafica del preferito 
         private async void setPreferiti()
         {
             for (int i = 0; i < utente.Preferiti.Count; i++)
@@ -219,10 +217,13 @@ namespace KnifeAndSpoon
             }
         }
 
+        //metodo per la gestione del FAB multiFAB
         private async void multiFabAction(object sender, EventArgs e)
         {
+            //se l'utente vuole visualizzare una ricetta approvata
             if (Mode.Equals("Show"))
             {
+                //se l'utente non è anonimo allora il pulsante dei preferiti deve funzionare come aggiunta/rimozione del preferito
                 if (!CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
                 {
                     if (isFav)
@@ -246,6 +247,7 @@ namespace KnifeAndSpoon
                 }
                 else
                 {
+                    //se l'utente è anonimo il FAB non deve caricare niente su firebase, funge da eventuale redirect alla pagina di login 
                     await Navigation.PushModalAsync(new ConfirmDialog("Questa funzione è disponibile solo per chi è registrato\nRegistrati ora", new Command(() =>
                     {
                         Device.BeginInvokeOnMainThread(() =>
@@ -255,10 +257,11 @@ namespace KnifeAndSpoon
                         });
                     })));
                 }
-                
+
             }
             else
             {
+                //se l'utente admin accede alla sezione di approvazione delle ricette visualizzerà un FAB con icona dedicata che chiederà l'approvazione per la pubblicazione della ricetta
                 multiFab.IsEnabled = false;
                 await Navigation.PushModalAsync(new ApproveDialog("Cosa vuoi fare?",
                     new Command(() =>
@@ -269,7 +272,7 @@ namespace KnifeAndSpoon
                     {
                         removeRicetta();
                     }),
-                    new Command(async() =>
+                    new Command(async () =>
                     {
                         await Navigation.PopModalAsync();
                         multiFab.IsEnabled = true;
@@ -277,6 +280,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //metodo per approvare la ricetta
         private void approveRicetta()
         {
             Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?",
@@ -295,9 +299,11 @@ namespace KnifeAndSpoon
                             //Aggiorna lista
                             backReturn.Execute(backReturn);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
-                                Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
+                            //questo catch potrebbe verificarsi, ad esempio, quando due admin si trovano nella stessa ricetta e il primo non la approva e in questo caso il secondo la approva
+                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () =>
+                            {
                                 await Navigation.PopAsync();
                                 backReturn.Execute(backReturn);
                             })));
@@ -306,6 +312,7 @@ namespace KnifeAndSpoon
                     ));
         }
 
+        //metodo per non approvare la ricetta
         private void removeRicetta()
         {
             Navigation.PushModalAsync(new ConfirmDialog("Sei sicuro?",
@@ -326,16 +333,15 @@ namespace KnifeAndSpoon
                             //Aggiorna lista
                             backReturn.Execute(backReturn);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
-                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
+                            //questo catch potrebbe verificarsi, ad esempio, quando due admin si trovano nella stessa ricetta e il primo non la approva e in questo caso il secondo non la approva
+                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () =>
+                            {
                                 await Navigation.PopAsync();
                                 backReturn.Execute(backReturn);
                             })));
                         }
-                        
-                        
-
                     })
                     ));
         }

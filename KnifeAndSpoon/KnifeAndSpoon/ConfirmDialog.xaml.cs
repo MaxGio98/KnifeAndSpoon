@@ -12,23 +12,25 @@ namespace KnifeAndSpoon
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ConfirmDialog : ContentPage
     {
-        public ConfirmDialog(string text,Command okComm, Command noComm)
+        public ConfirmDialog(string text, Command okComm, Command noComm)
         {
             InitializeComponent();
             label.Text = text;
-            ok.Command = new Command(() => {
+            ok.Command = new Command(() =>
+            {
                 ok.IsEnabled = false;
                 okComm.Execute(okComm);
             });
             no.Command = noComm;
-            abort.Command = new Command(()=> { Navigation.PopModalAsync();});
+            abort.Command = new Command(() => { Navigation.PopModalAsync(); });
         }
 
         public ConfirmDialog(string text, Command okComm)
         {
             InitializeComponent();
             label.Text = text;
-            ok.Command = new Command(() => {
+            ok.Command = new Command(() =>
+            {
                 ok.IsEnabled = false;
                 okComm.Execute(okComm);
             });

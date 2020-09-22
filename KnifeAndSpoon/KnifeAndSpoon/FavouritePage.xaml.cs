@@ -23,11 +23,12 @@ namespace KnifeAndSpoon
             loadFavRicette();
         }
 
+        //carica ricette preferite dell'utente
         private async Task loadFavRicette()
         {
-            if(utente.Preferiti.Count==0)
+            if (utente.Preferiti.Count == 0)
             {
-                await Navigation.PushModalAsync(new ErrorDialog("Non ci sono ricette nei prefeiriti\nAggiungile ora",new Command(()=> { Navigation.PopAsync(); })));
+                await Navigation.PushModalAsync(new ErrorDialog("Non ci sono ricette nei prefeiriti\nAggiungile ora", new Command(() => { Navigation.PopAsync(); })));
             }
             else
             {
@@ -36,7 +37,7 @@ namespace KnifeAndSpoon
                 {
                     var group = await CrossCloudFirestore.Current.Instance.GetCollection("Ricette").WhereEqualsTo(FieldPath.DocumentId, utente.Preferiti[i]).GetDocumentsAsync();
                     ricette.AddRange(group.ToObjects<Ricetta>().ToList());
-                    
+
                 }
                 Ricette = new ObservableCollection<Ricetta>(ricette);
                 BindableLayout.SetItemsSource(FavouriteList, Ricette);
@@ -58,7 +59,8 @@ namespace KnifeAndSpoon
                 if (temp[i].Id.Equals(value))
                 {
                     ShowPage page = new ShowPage((Ricetta)temp[i], "Show", utente);
-                    page.enableBackReturn(new Command(()=> {
+                    page.enableBackReturn(new Command(() =>
+                    {
                         loadFavRicette();
                     }));
                     PushPage(page);

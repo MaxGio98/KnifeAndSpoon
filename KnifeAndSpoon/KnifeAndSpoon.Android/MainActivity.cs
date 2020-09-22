@@ -15,7 +15,7 @@ using Xamarin.Forms;
 
 namespace KnifeAndSpoon.Droid
 {
-    [Activity(Label = "KnifeAndSpoon", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme",ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "KnifeAndSpoon", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }

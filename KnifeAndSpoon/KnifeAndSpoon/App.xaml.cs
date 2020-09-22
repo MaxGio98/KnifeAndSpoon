@@ -31,11 +31,12 @@ namespace KnifeAndSpoon
         {
         }
 
+        //controlla connessione attuale
         private void checkInitialConnection()
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
-                var popup = new CustomYesNoBox("Attenzione", "Nessuna connessione");
+                var popup = new CustomBox("Attenzione", "Nessuna connessione");
                 popup.PopupClosed += (o, closedArgs) =>
                 {
                     checkInitialConnection();
@@ -49,22 +50,23 @@ namespace KnifeAndSpoon
             }
         }
 
+        //controlla cambio di connessione
         private void checkConnection()
         {
             CrossConnectivity.Current.ConnectivityChanged += async (sender, agrs) =>
             {
                 if (!CrossConnectivity.Current.IsConnected)
                 {
-                    if(!connection)
+                    if (!connection)
                     {
-                        var popup = new CustomYesNoBox("Attenzione", "Nessuna connessione");
+                        var popup = new CustomBox("Attenzione", "Nessuna connessione");
                         popup.PopupClosed += (o, closedArgs) =>
                         {
                             checkInitialConnection();
                         };
                         connection = true;
                         popup.Show();
-                    }                    
+                    }
                 }
             };
         }

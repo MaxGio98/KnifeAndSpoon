@@ -32,6 +32,8 @@ namespace KnifeAndSpoon
             Servings.TextChanged += OnTextChanged;
             Time.TextChanged += OnTextChanged;
         }
+
+        //codice per la creazione della ui per inserire/gestire un ingrediente
         private void AddIngrediente(object sender, EventArgs args)
         {
             StackLayout stack = new StackLayout();
@@ -101,7 +103,7 @@ namespace KnifeAndSpoon
             lst_ingredienti.Children.Add(stack);
         }
 
-        private void longClickAddPicFab(object sender,EventArgs e)
+        private void longClickAddPicFab(object sender, EventArgs e)
         {
             DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiungi una foto");
         }
@@ -109,8 +111,8 @@ namespace KnifeAndSpoon
         {
             DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Torna indietro");
         }
-        
 
+        //rifiuto dei caratteri speciali "-" "." per le entry numeriche 
         private void OnTextChanged(object s, EventArgs e)
         {
             Entry entry = s as Entry;
@@ -124,6 +126,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //codice per la creazione della ui per inserire/gestire un passaggio
         private void AddPassaggio(object sender, EventArgs args)
         {
             StackLayout stack = new StackLayout();
@@ -151,18 +154,21 @@ namespace KnifeAndSpoon
             lst_passaggi.Children.Add(stack);
         }
 
+        //rimozione di un ingrediente
         private void RemoveIngrediente(object sender, EventArgs args)
         {
             Button temp = (Button)sender;
             lst_ingredienti.Children.Remove((StackLayout)temp.CommandParameter);
         }
 
+        //rimozione di un passaggio
         private void RemovePassaggio(object sender, EventArgs args)
         {
             Button temp = (Button)sender;
             lst_passaggi.Children.Remove((StackLayout)temp.CommandParameter);
         }
 
+        //controlla permessi
         private async void checkPermissions(object sender, EventArgs e)
         {
             if (await GetPermissions())
@@ -180,6 +186,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //metodo per acquisire un'immagine dalla fotocamera
         private async void getPhotoFromCamera()
         {
             await CrossMedia.Current.Initialize();
@@ -196,7 +203,7 @@ namespace KnifeAndSpoon
                 CompressionQuality = 10,
                 Directory = "Ricette",
                 Name = "test.jpg"
-            });; ;
+            }); ; ;
             if (file == null)
                 return;
             if (file == null)
@@ -213,10 +220,11 @@ namespace KnifeAndSpoon
             }
             else
             {
-                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori (minore di 700kb)"));
+                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori"));
             }
         }
 
+        //metodo per acquisire un'immagine dalla galleria
         private async void getPhotoFromGalleryAsync()
         {
             if (!CrossMedia.Current.IsPickPhotoSupported)
@@ -246,10 +254,11 @@ namespace KnifeAndSpoon
             }
             else
             {
-                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori (minore di 700kb)"));
+                await Navigation.PushModalAsync(new ErrorDialog("Per Favore metti un immagine di dimensioni minori"));
             }
         }
 
+        //metodo per acquisire tutti i permessi necessari
         private static async Task<bool> GetPermissions()
         {
             bool permissionsGranted = true;
@@ -259,7 +268,6 @@ namespace KnifeAndSpoon
             Permission.Storage,
             Permission.Camera
         };
-
             var permissionsNeededList = new List<Permission>();
             try
             {
@@ -275,9 +283,7 @@ namespace KnifeAndSpoon
             catch (Exception ex)
             {
             }
-
             var results = await CrossPermissions.Current.RequestPermissionsAsync(permissionsNeededList.ToArray());
-
             try
             {
                 foreach (var permission in permissionsNeededList)
@@ -317,6 +323,7 @@ namespace KnifeAndSpoon
             }
         }
 
+        //controllo campi della ricetta e upload ricetta su firebase
         private async void upload()
         {
             //Inizializzazione Ricetta

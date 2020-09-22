@@ -27,15 +27,17 @@ namespace KnifeAndSpoon
             {
                 if (CrossFirebaseAuth.Current.Instance.CurrentUser.IsAnonymous)
                 {
-                    Device.BeginInvokeOnMainThread(()=>
+                    //apertura della pagina principale
+                    Device.BeginInvokeOnMainThread(() =>
                     {
                         App.Current.MainPage = new NavigationPage(new HomePage());
                     });
-                    
+
                 }
                 else
                 {
                     loadOverlay.IsVisible = true;
+                    //controllo se l'utente si è registrato con la mail selezionata
                     var glob = await CrossCloudFirestore.Current.Instance.GetCollection("Utenti").WhereEqualsTo("Mail", CrossFirebaseAuth.Current.Instance.CurrentUser.Email).GetDocumentsAsync();
                     if (glob.Count == 0)
                     {
@@ -62,7 +64,7 @@ namespace KnifeAndSpoon
             LoginAsync();
         }
 
-        private void loginAnonymous(object sender,EventArgs args)
+        private void loginAnonymous(object sender, EventArgs args)
         {
             anonimous.IsEnabled = false;
             google.IsEnabled = false;
@@ -146,7 +148,7 @@ namespace KnifeAndSpoon
 
         }
 
-        private async void finalizeLogin(string idToken,string accessToken)
+        private async void finalizeLogin(string idToken, string accessToken)
         {
             //Registrazione utente su firebase
             var credential = CrossFirebaseAuth.Current.GoogleAuthProvider.GetCredential(idToken, accessToken);
@@ -163,7 +165,7 @@ namespace KnifeAndSpoon
                 //Apertura pagina principale
                 App.Current.MainPage = new NavigationPage(new HomePage());
             }
-            
+
         }
 
         private async void PushPage(ContentPage page)

@@ -17,7 +17,7 @@ using Xamarin.Forms;
 
 namespace KnifeAndSpoon.Droid
 {
-    class PhotoPickerService:IPhotoPickerService
+    class PhotoPickerService : IPhotoPickerService
     {
         public Task<Stream> GetImageStreamAsync()
         {

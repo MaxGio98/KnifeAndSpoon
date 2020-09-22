@@ -76,7 +76,8 @@ namespace KnifeAndSpoon
                 }
                 _timer.Change(Timeout.Infinite, Timeout.Infinite);
                 _timer.Dispose();
-                _timer = null;            }
+                _timer = null;
+            }
         }
 
         /// <summary>

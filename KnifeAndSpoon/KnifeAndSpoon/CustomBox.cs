@@ -4,20 +4,20 @@ using System.Linq;
 
 using Xamarin.Forms;
 
-public class CustomYesNoBox
+public class CustomBox
 {
     public string Text { get; set; }
     public string Title { get; set; }
     public List<string> Buttons { get; set; }
 
-    public CustomYesNoBox(string title, string text, params string[] buttons)
+    public CustomBox(string title, string text, params string[] buttons)
     {
         Title = title;
         Text = text;
         Buttons = buttons.ToList();
     }
 
-    public CustomYesNoBox(string title, string text) : this(title, text, "Riprova")
+    public CustomBox(string title, string text) : this(title, text, "Riprova")
     {
     }
 
@@ -42,5 +42,5 @@ public class CustomYesNoBoxClosedArgs : EventArgs
 
 public interface IYesNoPopupLoader
 {
-    void ShowPopup(CustomYesNoBox reference);
+    void ShowPopup(CustomBox reference);
 }
