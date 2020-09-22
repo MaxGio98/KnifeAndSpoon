@@ -291,12 +291,14 @@ namespace KnifeAndSpoon
                             Instance.GetCollection("Ricette").
                             GetDocument(r.Id).
                             UpdateDataAsync(new { isApproved = true });
+                            await Navigation.PopAsync();
                         }
                         catch(Exception e)
                         {
-                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore."));
                         }
-                        await Navigation.PopAsync();
+                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.",new Command(async ()=> {
+                                await Navigation.PopAsync();
+                            })));
                         //Aggiorna lista
                         backReturn.Execute(backReturn);
                     })
