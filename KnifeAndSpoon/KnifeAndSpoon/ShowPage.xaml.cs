@@ -295,11 +295,11 @@ namespace KnifeAndSpoon
                         }
                         catch(Exception e)
                         {
-                        }
-                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.",new Command(async ()=> {
+                            Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
                                 await Navigation.PopModalAsync();
                                 await Navigation.PopAsync();
                             })));
+                        }
                         //Aggiorna lista
                         backReturn.Execute(backReturn);
                     })
