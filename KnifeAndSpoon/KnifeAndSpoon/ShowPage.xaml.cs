@@ -292,16 +292,16 @@ namespace KnifeAndSpoon
                             GetDocument(r.Id).
                             UpdateDataAsync(new { isApproved = true });
                             await Navigation.PopAsync();
+                            //Aggiorna lista
+                            backReturn.Execute(backReturn);
                         }
                         catch(Exception e)
                         {
                             Navigation.PushModalAsync(new ErrorDialog("Si è verificato un errore.", new Command(async () => {
-                                await Navigation.PopModalAsync();
                                 await Navigation.PopAsync();
+                                backReturn.Execute(backReturn);
                             })));
                         }
-                        //Aggiorna lista
-                        backReturn.Execute(backReturn);
                     })
                     ));
         }
