@@ -64,6 +64,7 @@ namespace KnifeAndSpoon
             qt.VerticalOptions = LayoutOptions.Center;
             qt.WidthRequest = 50;
             qt.Keyboard = Keyboard.Numeric;
+            qt.TextChanged += OnTextChangedIngrediente;
             stack.Children.Add(qt);
             Picker ut = new Picker();
             ut.HorizontalTextAlignment = TextAlignment.End;
@@ -108,6 +109,15 @@ namespace KnifeAndSpoon
             lst_ingredienti.Children.Add(stack);
         }
 
+        private void OnTextChangedIngrediente(object s, EventArgs e)
+        {
+            Entry entry = s as Entry;
+            if (entry.Text.Contains("-"))
+            {
+                entry.Text = entry.Text.Replace("-", "");
+            }
+        }
+
         private void longClickAddPicFab(object sender, EventArgs e)
         {
             DependencyService.Get<IAndroidPopUp>().ShowSnackbar("Aggiungi una foto");
@@ -128,6 +138,10 @@ namespace KnifeAndSpoon
             if (entry.Text.Contains("."))
             {
                 entry.Text = entry.Text.Replace(".", "");
+            }
+            if (entry.Text.Contains(","))
+            {
+                entry.Text = entry.Text.Replace(",", "");
             }
         }
 
