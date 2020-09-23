@@ -11,7 +11,10 @@
              x:Class="KnifeAndSpoon.SettingsPage">
     <ContentPage.Content>
         <Grid>
-            <ImageButton Margin="10"  VerticalOptions="Start" HorizontalOptions="Start" HeightRequest="50" WidthRequest="50" CornerRadius="25" BackgroundColor="Transparent"  Source="backRed" Clicked="Back"></ImageButton>
+            <StackLayout Orientation="Horizontal" Margin="10,10,10,10" VerticalOptions="Start">
+                <ImageButton CornerRadius="25" BackgroundColor="Transparent" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" Source="backRed" Clicked="Back"></ImageButton>
+                <Label TextColor="Black" FontSize="25" Text="Impostazioni" VerticalOptions="Center"></Label>
+            </StackLayout>
             <StackLayout VerticalOptions="Center">
                 <controls:CircleImage x:Name="ImgUtente" Source="pizza" Aspect="AspectFit" BorderColor="Black" BorderThickness="2" VerticalOptions="Center" HorizontalOptions="Center" Margin="0,0,0,20" HeightRequest="200" WidthRequest="200">
                 </controls:CircleImage>

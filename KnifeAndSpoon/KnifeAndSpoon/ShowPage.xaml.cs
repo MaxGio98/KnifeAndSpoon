@@ -86,6 +86,7 @@ namespace KnifeAndSpoon
             ObservableCollection<Passaggio> Passaggi = new ObservableCollection<Passaggio>(passaggi);
             BindableLayout.SetItemsSource(lst_passaggi, Passaggi);
             LoadUtente(ricetta.Autore);
+
         }
 
         private void longClickMultiFab(object sender, EventArgs e)

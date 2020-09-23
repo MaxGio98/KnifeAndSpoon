@@ -43,6 +43,12 @@ namespace KnifeAndSpoon
             LoadRicette();
             LoadLastTen();
             TheCarousel.Position = 0;
+            Device.StartTimer(TimeSpan.FromSeconds(5), (Func<bool>)(() =>
+            {
+                TheCarousel.Position = (TheCarousel.Position + 1) % ((ObservableCollection<Ricetta>)TheCarousel.ItemsSource).Count;
+
+                return true;
+            }));
         }
 
         //inizio metodi gestione long press
