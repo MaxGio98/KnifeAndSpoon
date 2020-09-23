@@ -64,7 +64,6 @@ namespace KnifeAndSpoon
             qt.VerticalOptions = LayoutOptions.Center;
             qt.WidthRequest = 50;
             qt.Keyboard = Keyboard.Numeric;
-            qt.TextChanged += OnTextChanged;
             stack.Children.Add(qt);
             Picker ut = new Picker();
             ut.HorizontalTextAlignment = TextAlignment.End;
@@ -77,6 +76,7 @@ namespace KnifeAndSpoon
             ut.Items.Add("cucchiaino");
             ut.Items.Add("millilitri");
             ut.Items.Add("q.b.");
+            Boolean qtSelected = false;
             ut.SelectedIndexChanged += (object s, EventArgs e) =>
             {
                 ut.Unfocus();
@@ -85,12 +85,17 @@ namespace KnifeAndSpoon
                     qt.Text = "0";
                     qt.IsVisible = false;
                     qt.IsEnabled = false;
+                    qtSelected = true;
                 }
                 else
                 {
-                    qt.Text = "";
-                    qt.IsVisible = true;
-                    qt.IsEnabled = true;
+                    if(qtSelected)
+                    {
+                        qt.Text = "";
+                        qt.IsVisible = true;
+                        qt.IsEnabled = true;
+                        qtSelected = false;
+                    } 
                 }
             };
             ut.SelectedIndex = 0;
