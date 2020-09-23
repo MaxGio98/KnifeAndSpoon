@@ -45,8 +45,10 @@ namespace KnifeAndSpoon
             TheCarousel.Position = 0;
             Device.StartTimer(TimeSpan.FromSeconds(5), (Func<bool>)(() =>
             {
-                TheCarousel.Position = (TheCarousel.Position + 1) % ((ObservableCollection<Ricetta>)TheCarousel.ItemsSource).Count;
-
+                if(((ObservableCollection<Ricetta>)TheCarousel.ItemsSource).Count!=0)
+                {
+                    TheCarousel.Position = (TheCarousel.Position + 1) % ((ObservableCollection<Ricetta>)TheCarousel.ItemsSource).Count;
+                }
                 return true;
             }));
         }
@@ -78,6 +80,11 @@ namespace KnifeAndSpoon
 
         private async Task RefreshData()
         {
+            checkAntipasto.IsVisible = false;
+            checkPrimo.IsVisible = false;
+            checkSecondo.IsVisible = false;
+            checkContorno.IsVisible = false;
+            checkDolce.IsVisible = false;
             await LoadRicette();
             await LoadLastTen();
         }
